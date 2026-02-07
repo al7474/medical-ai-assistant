@@ -1,0 +1,15 @@
+# Backend dependencies - Phase 1
+# Install with: pip install -r requirements.txt
+
+# Main framework
+fastapi==0.109.0
+uvicorn[standard]==0.27.0
+
+# Data validation
+pydantic==2.5.3
+
+# CORS and web utilities
+python-multipart==0.0.6
+
+# Development tools
+python-dotenv==1.0.1
