@@ -1,0 +1,59 @@
+# Environment variables
+.env
+.env.local
+.env.production
+.env.*.local
+*.env
+
+# Docker
+*.log
+docker-compose.override.yml
+
+# Backups
+*.sql
+*.tar.gz
+backup_*
+
+# OS
+.DS_Store
+Thumbs.db
+*.swp
+*.swo
+
+# IDEs
+.vscode/
+.idea/
+.fleet/
+
+# Python
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+.Python
+*.so
+*.egg
+*.egg-info/
+dist/
+build/
+venv/
+env/
+
+# Node
+node_modules/
+.next/
+out/
+
+# Testing
+coverage/
+.pytest_cache/
+htmlcov/
+
+# Uploads
+backend/uploads/
+backend/data/vectorstore/
+
+# Logs
+*.log
+logs/
+

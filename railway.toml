@@ -1,0 +1,29 @@
+# Railway Configuration for Medical AI Assistant
+# Docs: https://docs.railway.app/deploy/config-as-code
+
+# This file tells Railway how to deploy your services from docker-compose.yml
+# Railway will automatically detect and deploy all services
+
+# Backend Service
+[[services]]
+name = "backend"
+source = "backend"
+dockerfile = "Dockerfile"
+
+[services.healthcheck]
+path = "/health"
+timeout = 60
+
+# Frontend Service  
+[[services]]
+name = "frontend"
+source = "frontend"
+dockerfile = "Dockerfile"
+
+# Database Service (PostgreSQL)
+[[services]]
+name = "postgres"
+image = "postgres:16"
+
+[services.volumes]
+postgres_data = "/var/lib/postgresql/data"
