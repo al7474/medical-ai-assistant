@@ -6,16 +6,131 @@ Phase 1: Basic backend without database
 This is your starting point. A simple REST API with FastAPI.
 """
 
-from fastapi import FastAPI
+
+from fastapi import FastAPI, Depends, HTTPException
 from fastapi.middleware.cors import CORSMiddleware
+from sqlalchemy.ext.asyncio import AsyncSession
+from sqlalchemy.future import select
+from sqlalchemy.exc import IntegrityError
+from typing import List
+from pydantic import BaseModel, ConfigDict
+import models
+import database
+from startup import lifespan
 
 
 # Create the FastAPI application
+
 app = FastAPI(
     title="Medical AI Assistant",
     description="My intelligent medical assistant - Learning step by step",
-    version="0.1.0"
+    version="0.1.0",
+    lifespan=lifespan
 )
+# ==================== ENDPOINTS ====================
+
+# --- User CRUD Models ---
+class UserCreate(BaseModel):
+    name: str
+    email: str
+
+class UserRead(BaseModel):
+    id: int
+    name: str
+    email: str
+    model_config = ConfigDict(from_attributes=True)
+
+# --- Appointment CRUD Models ---
+class AppointmentCreate(BaseModel):
+    user_id: int
+    description: str
+
+class AppointmentRead(BaseModel):
+    id: int
+    user_id: int
+    description: str
+    model_config = ConfigDict(from_attributes=True)
+
+# --- User CRUD Endpoints ---
+@app.post("/users/", response_model=UserRead)
+async def create_user(user: UserCreate, db: AsyncSession = Depends(database.get_db)):
+    new_user = models.User(name=user.name, email=user.email)
+    db.add(new_user)
+    try:
+        await db.commit()
+        await db.refresh(new_user)
+    except IntegrityError:
+        await db.rollback()
+        raise HTTPException(status_code=400, detail="Email already registered")
+    return new_user
+
+@app.get("/users/", response_model=List[UserRead])
+async def list_users(db: AsyncSession = Depends(database.get_db)):
+    result = await db.execute(select(models.User))
+    users = result.scalars().all()
+    return users
+
+# --- Appointment CRUD Endpoints ---
+@app.post("/appointments/", response_model=AppointmentRead)
+async def create_appointment(
+    appointment: AppointmentCreate, 
+    db: AsyncSession = Depends(database.get_db)
+):
+    """Create a new appointment"""
+    # Verify user exists
+    user_result = await db.execute(
+        select(models.User).where(models.User.id == appointment.user_id)
+    )
+    user = user_result.scalar_one_or_none()
+    if not user:
+        raise HTTPException(status_code=404, detail="User not found")
+    
+    new_appointment = models.Appointment(
+        user_id=appointment.user_id,
+        description=appointment.description
+    )
+    db.add(new_appointment)
+    await db.commit()
+    await db.refresh(new_appointment)
+    return new_appointment
+
+@app.get("/appointments/", response_model=List[AppointmentRead])
+async def list_appointments(db: AsyncSession = Depends(database.get_db)):
+    """List all appointments"""
+    result = await db.execute(select(models.Appointment))
+    appointments = result.scalars().all()
+    return appointments
+
+@app.get("/appointments/{appointment_id}", response_model=AppointmentRead)
+async def get_appointment(
+    appointment_id: int, 
+    db: AsyncSession = Depends(database.get_db)
+):
+    """Get a specific appointment by ID"""
+    result = await db.execute(
+        select(models.Appointment).where(models.Appointment.id == appointment_id)
+    )
+    appointment = result.scalar_one_or_none()
+    if not appointment:
+        raise HTTPException(status_code=404, detail="Appointment not found")
+    return appointment
+
+@app.delete("/appointments/{appointment_id}")
+async def delete_appointment(
+    appointment_id: int,
+    db: AsyncSession = Depends(database.get_db)
+):
+    """Delete an appointment"""
+    result = await db.execute(
+        select(models.Appointment).where(models.Appointment.id == appointment_id)
+    )
+    appointment = result.scalar_one_or_none()
+    if not appointment:
+        raise HTTPException(status_code=404, detail="Appointment not found")
+    
+    await db.delete(appointment)
+    await db.commit()
+    return {"message": "Appointment deleted successfully", "id": appointment_id}
 
 # Configure CORS to allow requests from the frontend (to be added later)
 app.add_middleware(
@@ -155,6 +270,30 @@ def test_responses():
             "symptoms - Symptom questions"
         ],
         "example": "Try sending 'hello' to the /chat endpoint"
+    }
+
+
+@app.get("/stats")
+async def get_statistics(db: AsyncSession = Depends(database.get_db)):
+    """
+    Get system statistics - number of users, appointments, etc.
+    """
+    # Count users
+    user_result = await db.execute(select(models.User))
+    total_users = len(user_result.scalars().all())
+    
+    # Count appointments
+    appointment_result = await db.execute(select(models.Appointment))
+    total_appointments = len(appointment_result.scalars().all())
+    
+    return {
+        "status": "operational",
+        "database": "connected",
+        "statistics": {
+            "total_users": total_users,
+            "total_appointments": total_appointments,
+        },
+        "message": "📊 System statistics retrieved successfully"
     }
 
 

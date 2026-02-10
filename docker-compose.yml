@@ -1,0 +1,17 @@
+services:
+  db:
+    image: postgres:16
+    container_name: medical-ai-db
+    restart: unless-stopped
+    environment:
+      POSTGRES_USER: medical_user
+      POSTGRES_PASSWORD: medical_pass
+      POSTGRES_DB: medical_db
+      POSTGRES_HOST_AUTH_METHOD: md5
+    ports:
+      - "5433:5432"
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+      - ./init.sql:/docker-entrypoint-initdb.d/init.sql
+volumes:
+  postgres_data:

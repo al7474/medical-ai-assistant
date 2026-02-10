@@ -16,27 +16,32 @@ Un asistente médico con IA que:
 | Componente | Tecnología | Estado |
 |------------|------------|--------|
 | Frontend | Next.js | ⏳ Por crear |
-| Backend | FastAPI | ✅ Fase 1 completa |
-| Base de Datos | PostgreSQL | ⏳ Próxima fase |
+| Backend | FastAPI | ✅ Fase 2 completa |
+| Base de Datos | PostgreSQL | ✅ Funcionando (puerto 5433) |
 | IA | LangGraph + LLM | ⏳ Fase posterior |
 | Cache | Redis | ⏳ Fase posterior |
 | WebSocket | FastAPI WS | ⏳ Fase posterior |
-| Contenedores | Docker | ⏳ Cuando sea necesario |
+| Contenedores | Docker | ✅ PostgreSQL en Docker |
 
-## 🚀 Estado Actual: Fase 1 - Backend Básico
+## 🚀 Estado Actual: Fase 2 - Backend Mejorado
 
 ### ✅ Completado
 - API REST funcionando con FastAPI
-- Endpoints básicos operativos
+- **Inicialización automática de base de datos** 🆕
+- Endpoints CRUD completos (users, appointments)
+- PostgreSQL con Docker (puerto 5433)
+- **Sistema de estadísticas** 🆕
 - Documentación automática
-- Estructura del proyecto
+- Estructura del proyecto lista
+- **Sin warnings de Pydantic** 🆕
 
 ### ⏳ Próximos Pasos
-1. Conectar PostgreSQL con Docker
-2. Crear modelos de base de datos
-3. Sistema de autenticación (registro/login)
+1. ~~Conectar PostgreSQL con Docker~~ ✅
+2. ~~Crear modelos de base de datos~~ ✅
+3. Sistema de autenticación (registro/login con JWT)
 4. Integrar IA con LangGraph
 5. Frontend con Next.js
+6. WebSocket para chat en tiempo real
 
 ## 📁 Estructura del Proyecto
 
@@ -53,29 +58,29 @@ medical-ai-assistant/
 
 ## 🏃 Inicio Rápido
 
-### Backend (Fase Actual)
+### Backend (¡Listo para usar!)
 
 ```bash
-# Ir a la carpeta backend
+# 1. Iniciar PostgreSQL con Docker
+docker-compose up -d
+
+# 2. Ir a la carpeta backend e iniciar servidor
 cd backend
+python -m uvicorn main:app --reload
 
-# Crear entorno virtual
-python -m venv venv
-
-# Activar entorno virtual (Windows)
-.\venv\Scripts\activate
-
-# Instalar dependencias
-pip install -r requirements.txt
-
-# Ejecutar servidor
-uvicorn main:app --reload
+# 3. ¡Listo! Abre tu navegador
+# http://localhost:8000/docs
 ```
 
+**¡Nuevo!** La base de datos se inicializa automáticamente, no necesitas ejecutar scripts adicionales.
+
 ### Probar la API
-- **Documentación:** http://localhost:8000/docs
-- **Estado:** http://localhost:8000/health
-- **Info:** http://localhost:8000/info
+- **Documentación interactiva:** http://localhost:8000/docs
+- **Estado del sistema:** http://localhost:8000/health
+- **Estadísticas:** http://localhost:8000/stats 🆕
+- **Info del proyecto:** http://localhost:8000/info
+
+📖 **Guía detallada:** Ver [QUICKSTART.md](QUICKSTART.md) para más ejemplos
 
 ## 📖 Documentación
 
@@ -90,12 +95,19 @@ Este proyecto se construye en fases educativas:
 - Endpoints básicos
 - Sin base de datos
 
-### Fase 2: Base de Datos (Próximo)
+### Fase 2: Base de Datos ✅
 - PostgreSQL con Docker
 - Modelos de datos
 - CRUD operations
+- Inicialización automática 🆕
+- Sistema de estadísticas 🆕
 
-### Fase 3: Autenticación
+### Fase 3: Autenticación (Próximo)
+- Registro de usuarios
+- Login con JWT
+- Protección de endpoints
+
+### Fase 4: Inteligencia Artificial
 - Registro de usuarios
 - Login con JWT
 - Rutas protegidas
