@@ -1,11 +1,12 @@
 """
 AI Chat Service using LangChain
-Supports OpenAI (GPT) and Anthropic (Claude)
+Supports OpenAI (GPT), Anthropic (Claude), and Google (Gemini)
 """
 import os
 from typing import Optional, Dict, Any
 from langchain_openai import ChatOpenAI
 from langchain_anthropic import ChatAnthropic
+from langchain_google_genai import ChatGoogleGenerativeAI
 from langchain_core.messages import HumanMessage, SystemMessage, AIMessage
 
 
@@ -46,12 +47,25 @@ class ChatService:
                 )
                 print(f"✅ AI Service initialized with Anthropic ({self.model_name})")
                 
+            elif self.provider == "gemini":
+                api_key = os.getenv("GEMINI_API_KEY")
+                if not api_key or api_key == "your-gemini-api-key-here":
+                    raise ValueError("Gemini API key not configured")
+                # Default to gemini-1.5-flash if not specified
+                gemini_model = self.model_name if self.model_name != "gpt-3.5-turbo" else "gemini-1.5-flash"
+                self.llm = ChatGoogleGenerativeAI(
+                    model=gemini_model,
+                    temperature=0.7,
+                    google_api_key=api_key
+                )
+                print(f"✅ AI Service initialized with Google Gemini ({gemini_model})")
+                
             else:
                 raise ValueError(f"Unknown AI provider: {self.provider}")
                 
         except Exception as e:
             print(f"⚠️  AI Service not available: {e}")
-            print("💡 Set OPENAI_API_KEY or ANTHROPIC_API_KEY in .env file")
+            print("💡 Set OPENAI_API_KEY, ANTHROPIC_API_KEY, or GEMINI_API_KEY in .env file")
             self.llm = None
     
     def is_available(self) -> bool:

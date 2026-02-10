@@ -24,6 +24,7 @@ class Settings:
     AI_MODEL: str = os.getenv("AI_MODEL", "gpt-3.5-turbo")
     OPENAI_API_KEY: Optional[str] = os.getenv("OPENAI_API_KEY")
     ANTHROPIC_API_KEY: Optional[str] = os.getenv("ANTHROPIC_API_KEY")
+    GEMINI_API_KEY: Optional[str] = os.getenv("GEMINI_API_KEY")
     
     # JWT Authentication
     SECRET_KEY: str = os.getenv("SECRET_KEY", "your-secret-key-change-in-production-please-use-openssl-rand-hex-32")

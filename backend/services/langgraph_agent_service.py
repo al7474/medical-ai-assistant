@@ -10,6 +10,7 @@ import json
 from langchain_core.messages import HumanMessage, AIMessage, SystemMessage, ToolMessage
 from langchain_openai import ChatOpenAI
 from langchain_anthropic import ChatAnthropic
+from langchain_google_genai import ChatGoogleGenerativeAI
 from langgraph.graph import StateGraph, END
 from langgraph.graph.message import add_messages
 from langgraph.prebuilt import ToolNode, tools_condition
@@ -54,15 +55,24 @@ class LangGraphAgentService:
         """Initialize the language model with tool binding"""
         openai_key = settings.OPENAI_API_KEY
         anthropic_key = settings.ANTHROPIC_API_KEY
+        gemini_key = settings.GEMINI_API_KEY
         
         if openai_key:
-            # Use OpenAI (better for tool calling)
+            # Use OpenAI (best for tool calling)
             self.llm = ChatOpenAI(
                 model="gpt-4o-mini",
                 temperature=0,
                 api_key=openai_key
             )
             self.provider = "openai"
+        elif gemini_key:
+            # Use Google Gemini (good for tool calling)
+            self.llm = ChatGoogleGenerativeAI(
+                model="gemini-1.5-flash",
+                temperature=0,
+                google_api_key=gemini_key
+            )
+            self.provider = "gemini"
         elif anthropic_key:
             # Use Anthropic
             self.llm = ChatAnthropic(
@@ -72,7 +82,7 @@ class LangGraphAgentService:
             )
             self.provider = "anthropic"
         else:
-            raise ValueError("No AI provider API key configured. Set OPENAI_API_KEY or ANTHROPIC_API_KEY")
+            raise ValueError("No AI provider API key configured. Set OPENAI_API_KEY, GEMINI_API_KEY, or ANTHROPIC_API_KEY")
         
         # Bind tools to the LLM
         self.llm_with_tools = self.llm.bind_tools(AGENT_TOOLS)
