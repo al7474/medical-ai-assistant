@@ -4,9 +4,11 @@
 # Main framework
 fastapi==0.109.0
 uvicorn[standard]==0.27.0
+websockets==12.0  # WebSocket support for real-time chat
 
 # Data validation
 pydantic==2.5.3
+email-validator==2.3.0
 
 # Database
 sqlalchemy==2.0.25
@@ -26,6 +28,11 @@ langchain-anthropic==0.1.4
 langgraph==0.0.24
 openai==1.12.0
 anthropic==0.18.1
+
+# Authentication (Phase 5)
+python-jose[cryptography]==3.3.0
+passlib[bcrypt]==1.7.4
+bcrypt==4.0.1  # Pin to 4.0.1 for passlib compatibility
 
 # For testing
 requests==2.31.0

@@ -2,6 +2,6 @@
 API routers package
 """
 
-from .routes import users, appointments, chat, system
+from .routes import users, appointments, chat, system, auth
 
-__all__ = ["users", "appointments", "chat", "system"]
+__all__ = ["users", "appointments", "chat", "system", "auth"]

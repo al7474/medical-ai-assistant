@@ -1,8 +1,15 @@
 """
 Database Initialization Script
 Run this script to create all database tables
-Usage: python init_db.py
+Usage: python scripts/init_db.py
 """
+import sys
+import os
+from pathlib import Path
+
+# Add parent directory to path to import modules
+sys.path.insert(0, str(Path(__file__).parent.parent))
+
 import asyncio
 from database import engine
 from models import Base

@@ -15,7 +15,7 @@ from fastapi.middleware.cors import CORSMiddleware
 
 from config import settings
 from core import lifespan
-from api.routes import users, appointments, chat, system
+from api.routes import users, appointments, chat, system, auth
 
 
 # Create the FastAPI application
@@ -38,6 +38,7 @@ app.add_middleware(
 
 # Include routers
 app.include_router(system.router)
+app.include_router(auth.router)
 app.include_router(users.router)
 app.include_router(appointments.router)
 app.include_router(chat.router)

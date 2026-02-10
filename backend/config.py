@@ -10,7 +10,7 @@ class Settings:
     
     # App info
     APP_NAME: str = "Medical AI Assistant"
-    APP_VERSION: str = "0.2.0"
+    APP_VERSION: str = "0.3.0"
     APP_DESCRIPTION: str = "My intelligent medical assistant - Learning step by step"
     
     # Database
@@ -24,6 +24,11 @@ class Settings:
     AI_MODEL: str = os.getenv("AI_MODEL", "gpt-3.5-turbo")
     OPENAI_API_KEY: Optional[str] = os.getenv("OPENAI_API_KEY")
     ANTHROPIC_API_KEY: Optional[str] = os.getenv("ANTHROPIC_API_KEY")
+    
+    # JWT Authentication
+    SECRET_KEY: str = os.getenv("SECRET_KEY", "your-secret-key-change-in-production-please-use-openssl-rand-hex-32")
+    ALGORITHM: str = "HS256"
+    ACCESS_TOKEN_EXPIRE_MINUTES: int = 60 * 24 * 7  # 7 days
     
     # CORS
     ALLOWED_ORIGINS: list = ["*"]  # In production, specify allowed origins
