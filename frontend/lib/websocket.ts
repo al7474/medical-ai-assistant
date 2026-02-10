@@ -41,7 +41,6 @@ export class WebSocketClient {
 
   connect() {
     if (this.ws?.readyState === WebSocket.OPEN) {
-      console.log('WebSocket already connected')
       return
     }
 
@@ -50,7 +49,6 @@ export class WebSocketClient {
       this.ws = new WebSocket(wsUrl)
 
       this.ws.onopen = () => {
-        console.log('✅ WebSocket connected')
         this.reconnectAttempts = 0
         this.connectHandlers.forEach((handler) => handler())
       }
@@ -65,12 +63,10 @@ export class WebSocketClient {
       }
 
       this.ws.onerror = (error) => {
-        console.error('❌ WebSocket error:', error)
         this.errorHandlers.forEach((handler) => handler(error))
       }
 
       this.ws.onclose = () => {
-        console.log('🔌 WebSocket disconnected')
         this.disconnectHandlers.forEach((handler) => handler())
         this.attemptReconnect()
       }
@@ -85,15 +81,9 @@ export class WebSocketClient {
       this.reconnectAttempts++
       const delay = this.reconnectDelay * this.reconnectAttempts
 
-      console.log(
-        `🔄 Reconnecting... (${this.reconnectAttempts}/${this.maxReconnectAttempts}) in ${delay}ms`
-      )
-
       setTimeout(() => {
         this.connect()
       }, delay)
-    } else {
-      console.error('❌ Max reconnection attempts reached')
     }
   }
 
@@ -106,7 +96,6 @@ export class WebSocketClient {
       }
       this.ws.send(JSON.stringify(message))
     } else {
-      console.error('WebSocket is not connected')
       throw new Error('WebSocket not connected')
     }
   }

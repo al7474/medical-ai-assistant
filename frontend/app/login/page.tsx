@@ -20,15 +20,38 @@ export default function LoginPage() {
     setLoading(true)
 
     try {
+      // Login to get token
       const response = await authAPI.login(email, password)
-      const userData = await authAPI.getMe()
       
+      if (!response.access_token) {
+        throw new Error('No se recibió token del backend')
+      }
+      
+      // Get user data with the token
+      const userData = await authAPI.getMe(response.access_token)
+      
+      // Save to store
       setAuth(userData, response.access_token)
+      
+      // Wait for state to persist
+      await new Promise(resolve => setTimeout(resolve, 300))
+      
+      // Redirect to dashboard
       router.push('/dashboard')
+      
     } catch (err: any) {
-      setError(
-        err.response?.data?.detail || 'Error al iniciar sesión. Verifica tus credenciales.'
-      )
+      let errorMessage = 'Error al iniciar sesión'
+      
+      if (err.code === 'ERR_NETWORK' || err.message?.includes('Network')) {
+        errorMessage = 'No se puede conectar al servidor'
+      } else if (err.response?.status === 401) {
+        errorMessage = 'Email o contraseña incorrectos'
+      } else if (err.response?.data?.detail) {
+        const detail = err.response.data.detail
+        errorMessage = typeof detail === 'string' ? detail : detail[0]?.msg || errorMessage
+      }
+      
+      setError(errorMessage)
     } finally {
       setLoading(false)
     }
@@ -75,9 +98,10 @@ export default function LoginPage() {
                   type="email"
                   value={email}
                   onChange={(e) => setEmail(e.target.value)}
-                  className="w-full pl-10 pr-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary-500 focus:border-transparent outline-none transition-all"
+                  className="w-full pl-10 pr-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary-500 focus:border-transparent outline-none transition-all text-gray-900 bg-white placeholder:text-gray-400"
                   placeholder="tu@email.com"
                   required
+                  autoComplete="email"
                 />
               </div>
             </div>
@@ -96,9 +120,10 @@ export default function LoginPage() {
                   type="password"
                   value={password}
                   onChange={(e) => setPassword(e.target.value)}
-                  className="w-full pl-10 pr-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary-500 focus:border-transparent outline-none transition-all"
+                  className="w-full pl-10 pr-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary-500 focus:border-transparent outline-none transition-all text-gray-900 bg-white placeholder:text-gray-400"
                   placeholder="••••••••"
                   required
+                  autoComplete="current-password"
                 />
               </div>
             </div>

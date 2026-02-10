@@ -14,21 +14,26 @@ export default function DashboardPage() {
   const [loading, setLoading] = useState(true)
 
   useEffect(() => {
-    if (!isAuthenticated || !token) {
-      router.push('/login')
-      return
-    }
-
-    // Verify token is still valid
-    authAPI
-      .getMe()
-      .then(() => {
-        setLoading(false)
-      })
-      .catch(() => {
-        logout()
+    // Give store time to rehydrate from localStorage
+    const timer = setTimeout(() => {
+      if (!isAuthenticated || !token) {
         router.push('/login')
-      })
+        return
+      }
+
+      // Verify token is still valid
+      authAPI
+        .getMe()
+        .then(() => {
+          setLoading(false)
+        })
+        .catch(() => {
+          logout()
+          router.push('/login')
+        })
+    }, 200)
+
+    return () => clearTimeout(timer)
   }, [isAuthenticated, token, router, logout])
 
   const handleLogout = async () => {

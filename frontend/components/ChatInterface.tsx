@@ -102,7 +102,6 @@ export default function ChatInterface({ onConnectionChange }: ChatInterfaceProps
       wsClient.current.sendMessage(input)
       setInput('')
     } catch (error) {
-      console.error('Failed to send message:', error)
       setIsSending(false)
     }
   }
@@ -216,7 +215,8 @@ export default function ChatInterface({ onConnectionChange }: ChatInterfaceProps
             onKeyPress={handleKeyPress}
             placeholder="Escribe tu mensaje..."
             disabled={!isConnected || isSending}
-            className="flex-1 px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary-500 focus:border-transparent outline-none disabled:opacity-50 disabled:cursor-not-allowed"
+            className="flex-1 px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary-500 focus:border-transparent outline-none disabled:opacity-50 disabled:cursor-not-allowed text-gray-900 bg-white placeholder:text-gray-400"
+            autoComplete="off"
           />
           <button
             onClick={handleSend}

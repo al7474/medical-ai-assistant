@@ -61,17 +61,17 @@ export const authAPI = {
     return response.data
   },
 
-  getMe: async () => {
-    const response = await api.get('/auth/me')
+  getMe: async (token?: string) => {
+    const headers: any = {}
+    if (token) {
+      headers.Authorization = `Bearer ${token}`
+    }
+    const response = await api.get('/auth/me', { headers })
     return response.data
   },
 
   logout: async () => {
-    try {
-      await api.post('/auth/logout')
-    } catch (error) {
-      console.error('Logout error:', error)
-    }
+    await api.post('/auth/logout').catch(() => {})
   },
 }
 
