@@ -19,6 +19,7 @@ An AI-powered medical assistant that:
 | Backend | FastAPI | ✅ Complete |
 | Database | PostgreSQL | ✅ Running (port 5433) |
 | AI | LangChain + OpenAI/Anthropic | ✅ Configured |
+| Agent | LangGraph | ✅ Phase 4 complete |
 | Vector Store | FAISS | ✅ RAG implemented |
 | Embeddings | OpenAI text-embedding-ada-002 | ✅ Phase 3 complete |
 | Authentication | JWT | ✅ Complete |
@@ -29,7 +30,7 @@ An AI-powered medical assistant that:
 | Cache | Redis | ⏳ Phase 6 |
 | Containers | Docker | ✅ PostgreSQL |
 
-## 🚀 Current Status: Phase 3 - RAG Complete ✅
+## 🚀 Current Status: Phase 4 - LangGraph Complete ✅
 
 ### ✅ Phase 1: Medical Data Models (Complete)
 - Complete medical profile system (age, BMI, blood type)
@@ -48,7 +49,7 @@ An AI-powered medical assistant that:
 - Recent conversation memory
 📖 **[PHASE2_COMPLETED.md](PHASE2_COMPLETED.md)**
 
-### ✅ Phase 3: RAG Implementation (Complete) 🆕
+### ✅ Phase 3: RAG Implementation (Complete)
 - **Vector store with FAISS** (semantic search)
 - **Document processing service** (PDF extraction)
 - **OpenAI embeddings** integration
@@ -56,7 +57,17 @@ An AI-powered medical assistant that:
 - **Document-aware AI responses**
 - **Per-user vector stores**
 - **Graceful degradation** (works without API key)
-📖 **[PHASE3_COMPLETED.md](PHASE3_COMPLETED.md)** 🆕
+📖 **[PHASE3_COMPLETED.md](PHASE3_COMPLETED.md)**
+
+### ✅ Phase 4: LangGraph Intelligent Workflows (Complete) 🆕
+- **6 agent tools** (search docs, appointments, profile)
+- **LangGraph state-based workflow**
+- **Multi-step autonomous reasoning**
+- **Tool calling** (OpenAI/Anthropic)
+- **Agent REST & WebSocket endpoints**
+- **Conversation persistence**
+- **Error handling and fallbacks**
+📖 **[PHASE4_COMPLETED.md](PHASE4_COMPLETED.md)** 🆕
 
 ### ✅ Frontend Basic Implementation (Complete)
 - Next.js 14 with TypeScript
@@ -68,8 +79,7 @@ An AI-powered medical assistant that:
 - Protected routes and JWT handling
 
 ### 🚧 Next Phases
-- **Phase 4:** LangGraph workflows (agent orchestration, multi-step reasoning) ⏳ **NEXT**
-- **Phase 5:** Advanced Frontend UI (medical dashboard, visualizations, document viewer)
+- **Phase 5:** Advanced Frontend UI (medical dashboard, visualizations, document viewer) ⏳ **NEXT**
 - **Phase 6:** Optimizations (caching, testing, production deployment)
 
 ## 📁 Project Structure
@@ -86,11 +96,14 @@ medical-ai-assistant/
 │   │   ├── chat_service.py       # AI chat with LangChain
 │   │   ├── vector_store_service.py # FAISS vector store (RAG)
 │   │   ├── document_processing_service.py # PDF processing
-│   │   └── user_context_service.py # Context retrieval
+│   │   ├── langgraph_agent_service.py # LangGraph agent 🆕
+│   │   ├── agent_tools.py        # Agent tools 🆕
+│   │   └── medical_context_service.py # Context retrieval
 │   ├── api/routes/               # API endpoints
 │   │   ├── chat.py               # REST chat
 │   │   ├── websocket.py          # WebSocket chat
-│   │   ├── medical_documents.py  # Document upload 🆕
+│   │   ├── agent.py              # Agent endpoints 🆕
+│   │   ├── medical_documents.py  # Document upload
 │   │   └── medical_profile.py    # Medical data
 │   └── data/vectorstore/         # Vector stores per user
 │
@@ -199,14 +212,17 @@ This project is built in structured phases:
 - Per-user vector store isolation
 📖 [PHASE3_COMPLETED.md](PHASE3_COMPLETED.md) 🆕
 
-### Phase 4: LangGraph Workflows ⏳ (Next)
-- Agent orchestration
+### Phase 4: LangGraph Workflows ✅
+- LangGraph agent orchestration
+- 6 intelligent agent tools
 - Multi-step reasoning
-- Tool calling (appointments, documents, medical data)
-- State persistence
+- Tool calling (OpenAI/Anthropic)
+- Agent REST and WebSocket endpoints
+- State-based conversation flows
 - Autonomous task execution
+📖 [PHASE4_COMPLETED.md](PHASE4_COMPLETED.md)
 
-### Phase 5: Frontend Medical UI ⏳
+### Phase 5: Frontend Medical UI ⏳ (Next)
 - Medical dashboard with visualizations
 - Document viewer and manager
 - Real-time chat interface
@@ -237,7 +253,8 @@ This project is built in structured phases:
 - **[STATUS.md](STATUS.md)** - Current project status and progress
 - **[PHASE1_COMPLETED.md](PHASE1_COMPLETED.md)** - Medical data models
 - **[PHASE2_COMPLETED.md](PHASE2_COMPLETED.md)** - User context integration
-- **[PHASE3_COMPLETED.md](PHASE3_COMPLETED.md)** - RAG implementation 🆕
+- **[PHASE3_COMPLETED.md](PHASE3_COMPLETED.md)** - RAG implementation
+- **[PHASE4_COMPLETED.md](PHASE4_COMPLETED.md)** - LangGraph agent workflows 🆕
 - **[LANGUAGE_GUIDELINES.md](LANGUAGE_GUIDELINES.md)** - Language standards
 - **[PROJECT_GUIDELINES.md](PROJECT_GUIDELINES.md)** - Development guidelines
 

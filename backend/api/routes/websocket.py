@@ -14,6 +14,7 @@ from services.websocket_manager import get_connection_manager
 from services.chat_service import get_chat_service
 from services.medical_context_service import get_medical_context_service
 from services.document_processing_service import get_document_processing_service
+from services.langgraph_agent_service import get_agent_service
 from services.auth_service import verify_token
 from api.deps import get_db
 
@@ -167,6 +168,7 @@ async def websocket_chat(
             # Extract message details
             message_type = message_data.get("type", "message")
             user_message = message_data.get("text", "")
+            use_agent = message_data.get("use_agent", False)  # Optional: use LangGraph agent
             
             if not user_message:
                 await manager.send_personal_message(
@@ -197,32 +199,78 @@ async def websocket_chat(
             await manager.send_personal_message(
                 {
                     "type": "typing",
-                    "message": "AI is thinking...",
+                    "message": "AI is thinking..." if not use_agent else "Agent is working...",
                     "timestamp": datetime.utcnow().isoformat()
                 },
                 websocket
             )
             
-            # Retrieve relevant documents for RAG (if available)
-            rag_context = ""
-            try:
-                rag_context = await document_service.get_context_for_chat(
-                    query=user_message,
-                    user_id=user.id,
-                    k=3  # Retrieve top 3 relevant documents
-                )
-            except Exception as e:
-                print(f"⚠️  RAG context retrieval failed: {e}")
+            # Get AI response - use agent if requested and available
+            bot_response = ""
+            provider_info = ""
+            model_info = ""
             
-            # Get AI response with medical context and RAG
-            try:
-                bot_response = await chat_service.chat(
-                    message=user_message, 
-                    formatted_context=formatted_context,
-                    rag_context=rag_context if rag_context else None
-                )
-            except Exception as e:
-                bot_response = f"Sorry, I encountered an error: {str(e)}"
+            if use_agent:
+                try:
+                    # Use LangGraph agent
+                    agent_service = get_agent_service(db)
+                    
+                    if agent_service.is_available():
+                        # Get conversation history for agent
+                        conv_history = await context_service.get_recent_conversation_history(
+                            user_id=user.id,
+                            conversation_id=conversation_id,
+                            limit=10
+                        )
+                        conversation_history = [
+                            {"role": msg.role.value, "content": msg.content}
+                            for msg in conv_history
+                        ] if conv_history else None
+                        
+                        # Run agent
+                        bot_response = await agent_service.run(
+                            user_message=user_message,
+                            user_id=user.id,
+                            user_context=formatted_context,
+                            conversation_history=conversation_history
+                        )
+                        provider_info = "langgraph_agent"
+                        model_info = agent_service.provider
+                    else:
+                        bot_response = "⚠️ Agent not available. Please configure OpenAI or Anthropic API key."
+                        provider_info = "error"
+                        model_info = "none"
+                except Exception as e:
+                    print(f"⚠️  Agent execution failed: {e}")
+                    bot_response = f"Agent error: {str(e)}. Falling back to simple chat."
+                    use_agent = False  # Fall back to simple chat
+            
+            if not use_agent or not bot_response:
+                # Use simple chat with RAG
+                # Retrieve relevant documents for RAG (if available)
+                rag_context = ""
+                try:
+                    rag_context = await document_service.get_context_for_chat(
+                        query=user_message,
+                        user_id=user.id,
+                        k=3  # Retrieve top 3 relevant documents
+                    )
+                except Exception as e:
+                    print(f"⚠️  RAG context retrieval failed: {e}")
+                
+                # Get AI response with medical context and RAG
+                try:
+                    bot_response = await chat_service.chat(
+                        message=user_message, 
+                        formatted_context=formatted_context,
+                        rag_context=rag_context if rag_context else None
+                    )
+                    provider_info = chat_service.provider if chat_service.is_available() else "fallback"
+                    model_info = chat_service.model_name if chat_service.is_available() else "simple"
+                except Exception as e:
+                    bot_response = f"Sorry, I encountered an error: {str(e)}"
+                    provider_info = "error"
+                    model_info = "none"
             
             # Save AI response to database
             try:
@@ -231,8 +279,8 @@ async def websocket_chat(
                     role=MessageRole.ASSISTANT,
                     content=bot_response,
                     conversation_id=conversation_id,
-                    ai_provider=chat_service.provider if chat_service.is_available() else "fallback",
-                    ai_model=chat_service.model_name if chat_service.is_available() else "simple",
+                    ai_provider=provider_info,
+                    ai_model=model_info,
                     context_snapshot=formatted_context[:500]  # Save truncated context
                 )
             except Exception as e:
@@ -245,9 +293,10 @@ async def websocket_chat(
                     "text": bot_response,
                     "user_message": user_message,
                     "timestamp": datetime.utcnow().isoformat(),
-                    "ai_enabled": chat_service.is_available(),
-                    "provider": chat_service.provider if chat_service.is_available() else "fallback",
-                    "model": chat_service.model_name if chat_service.is_available() else "simple"
+                    "ai_enabled": True,
+                    "mode": "agent" if use_agent else "chat",
+                    "provider": provider_info,
+                    "model": model_info
                 },
                 websocket
             )

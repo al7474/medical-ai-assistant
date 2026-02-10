@@ -24,7 +24,8 @@ from api.routes import (
     websocket, 
     medical_profile, 
     conversations,
-    medical_documents
+    medical_documents,
+    agent
 )
 
 
@@ -56,6 +57,7 @@ app.include_router(websocket.router)
 app.include_router(medical_profile.router)
 app.include_router(conversations.router)
 app.include_router(medical_documents.router)
+app.include_router(agent.router)
 
 
 # Startup message when you run the server
