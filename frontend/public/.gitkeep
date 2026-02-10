@@ -1,0 +1,9 @@
+# Public Assets
+
+Place your public assets here:
+- favicon.ico
+- robots.txt
+- images/
+- etc.
+
+Files in this directory are served at the root path.
