@@ -39,6 +39,11 @@ export default function ChatInterface({ onConnectionChange }: ChatInterfaceProps
     // Handle messages
     wsClient.current.onMessage((wsMsg: WebSocketMessage) => {
       if (wsMsg.type === 'system') {
+        // Skip welcome messages (they're just for connection confirmation)
+        if (wsMsg.message?.includes('Welcome') && wsMsg.message?.includes('Connected')) {
+          return
+        }
+        
         const systemMsg: ChatMessage = {
           id: Date.now().toString(),
           role: 'system',

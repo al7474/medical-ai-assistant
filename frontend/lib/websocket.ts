@@ -29,6 +29,7 @@ export class WebSocketClient {
   private reconnectAttempts = 0
   private maxReconnectAttempts = 5
   private reconnectDelay = 1000
+  private reconnectTimeout: NodeJS.Timeout | null = null
   private messageHandlers: MessageHandler[] = []
   private connectHandlers: ConnectionHandler[] = []
   private disconnectHandlers: ConnectionHandler[] = []
@@ -81,7 +82,7 @@ export class WebSocketClient {
       this.reconnectAttempts++
       const delay = this.reconnectDelay * this.reconnectAttempts
 
-      setTimeout(() => {
+      this.reconnectTimeout = setTimeout(() => {
         this.connect()
       }, delay)
     }
@@ -101,6 +102,16 @@ export class WebSocketClient {
   }
 
   disconnect() {
+    // Cancel any pending reconnect attempts
+    if (this.reconnectTimeout) {
+      clearTimeout(this.reconnectTimeout)
+      this.reconnectTimeout = null
+    }
+    
+    // Stop reconnection attempts
+    this.reconnectAttempts = this.maxReconnectAttempts
+    
+    // Close the connection
     if (this.ws) {
       this.ws.close()
       this.ws = null
