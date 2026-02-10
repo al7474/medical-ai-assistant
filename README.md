@@ -16,32 +16,36 @@ Un asistente médico con IA que:
 | Componente | Tecnología | Estado |
 |------------|------------|--------|
 | Frontend | Next.js | ⏳ Por crear |
-| Backend | FastAPI | ✅ Fase 2 completa |
+| Backend | FastAPI | ✅ Fase 3 completa |
 | Base de Datos | PostgreSQL | ✅ Funcionando (puerto 5433) |
-| IA | LangGraph + LLM | ⏳ Fase posterior |
+| IA | LangChain + LLM | ✅ Configurado (requiere API key) |
 | Cache | Redis | ⏳ Fase posterior |
 | WebSocket | FastAPI WS | ⏳ Fase posterior |
 | Contenedores | Docker | ✅ PostgreSQL en Docker |
 
-## 🚀 Estado Actual: Fase 2 - Backend Mejorado
+## 🚀 Estado Actual: Fase 3 - AI Integration
 
 ### ✅ Completado
 - API REST funcionando con FastAPI
-- **Inicialización automática de base de datos** 🆕
+- **Inicialización automática de base de datos**
 - Endpoints CRUD completos (users, appointments)
 - PostgreSQL con Docker (puerto 5433)
-- **Sistema de estadísticas** 🆕
+- **Sistema de estadísticas**
+- **AI Chat Service con LangChain** 🤖✨
+- **Soporte para OpenAI GPT y Anthropic Claude** 🆕
+- **Fallback inteligente sin API key** 🆕
 - Documentación automática
 - Estructura del proyecto lista
-- **Sin warnings de Pydantic** 🆕
+- Sin warnings de Pydantic
 
 ### ⏳ Próximos Pasos
 1. ~~Conectar PostgreSQL con Docker~~ ✅
 2. ~~Crear modelos de base de datos~~ ✅
-3. Sistema de autenticación (registro/login con JWT)
-4. Integrar IA con LangGraph
-5. Frontend con Next.js
-6. WebSocket para chat en tiempo real
+3. ~~Integrar AI con LangChain~~ ✅
+4. **Configurar API key para habilitar IA** (5 min)
+5. Sistema de autenticación (registro/login con JWT)
+6. Frontend con Next.js
+7. WebSocket para chat en tiempo real
 
 ## 📁 Estructura del Proyecto
 
@@ -79,8 +83,11 @@ python -m uvicorn main:app --reload
 - **Estado del sistema:** http://localhost:8000/health
 - **Estadísticas:** http://localhost:8000/stats 🆕
 - **Info del proyecto:** http://localhost:8000/info
+- **Chat con IA:** http://localhost:8000/docs (POST /chat) 🤖
 
-📖 **Guía detallada:** Ver [QUICKSTART.md](QUICKSTART.md) para más ejemplos
+📖 **Guías detalladas:**
+- [QUICKSTART.md](QUICKSTART.md) - Inicio rápido
+- [AI_SETUP.md](AI_SETUP.md) - Cómo configurar la IA 🆕
 
 ## 📖 Documentación
 
@@ -102,12 +109,19 @@ Este proyecto se construye en fases educativas:
 - Inicialización automática 🆕
 - Sistema de estadísticas 🆕
 
-### Fase 3: Autenticación (Próximo)
+### Fase 3: Integración de IA ✅
+- LangChain integrado
+- Soporte OpenAI GPT y Anthropic Claude
+- Chat inteligente con contexto
+- Fallback sin API key
+- Sistema de prompts médicos
+
+### Fase 4: Autenticación (Próximo)
 - Registro de usuarios
 - Login con JWT
 - Protección de endpoints
 
-### Fase 4: Inteligencia Artificial
+### Fase 5: Inteligencia Artificial Avanzada
 - Registro de usuarios
 - Login con JWT
 - Rutas protegidas

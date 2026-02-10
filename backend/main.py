@@ -17,6 +17,7 @@ from pydantic import BaseModel, ConfigDict
 import models
 import database
 from startup import lifespan
+from chat_service import get_chat_service
 
 
 # Create the FastAPI application
@@ -187,40 +188,45 @@ def greet_user(name: str):
 
 
 @app.post("/chat")
-def chat(message: dict):
+async def chat(message: dict):
     """
-    Receives a message and responds (no AI yet)
-
-    In the future, this endpoint will use LangGraph and LLM for
-    intelligent responses.
-
+    Chat with AI medical assistant
+    
+    Now powered by LangChain + LLM (OpenAI GPT or Anthropic Claude)
+    
     Example usage in /docs:
     {
-        "text": "Hello, I need help"
+        "text": "Hello, I have a headache. What should I do?"
     }
+    
+    To enable AI:
+    1. Get API key from https://platform.openai.com/api-keys
+    2. Add to .env file: OPENAI_API_KEY=sk-...
+    3. Restart server
     """
     user_text = message.get("text", "")
-
-    # Simple predefined responses (no AI yet)
-    responses = {
-        "hello": "Hello! 👋 I am your medical assistant. How can I help you?",
-        "help": "I can help you with:\n- General medical information\n- Scheduling appointments\n- Symptom questions",
-        "appointment": "To schedule an appointment, I will need some details. What type of specialist do you need?",
-        "symptoms": "Please describe your symptoms and I will help you with general information.",
+    
+    if not user_text:
+        raise HTTPException(status_code=400, detail="Message text is required")
+    
+    # Get chat service
+    chat_svc = get_chat_service()
+    
+    # Optional: Add context (user info, medical history, etc.)
+    context = {
+        "user_info": "General consultation"
     }
-
-    # Look for keyword in the message
-    response = "I am a simple medical assistant (for now). Ask me about appointments, symptoms, or help. 🤖"
-    for keyword, reply in responses.items():
-        if keyword in user_text.lower():
-            response = reply
-            break
-
+    
+    # Get AI response
+    bot_response = await chat_svc.chat(user_text, context)
+    
     return {
         "user_message": user_text,
-        "bot_response": response,
+        "bot_response": bot_response,
         "status": "ok",
-        "note": "This is a simple response. Real AI coming soon!"
+        "ai_enabled": chat_svc.is_available(),
+        "provider": chat_svc.provider if chat_svc.is_available() else "fallback",
+        "model": chat_svc.model_name if chat_svc.is_available() else "simple"
     }
 
 
@@ -229,28 +235,37 @@ def system_info():
     """
     Shows project information and next steps
     """
+    chat_svc = get_chat_service()
+    
     return {
         "project": "Medical AI Assistant",
-        "current_phase": "Phase 1 - Basic Backend ✅",
+        "current_phase": "Phase 3 - AI Integration ✅" if chat_svc.is_available() else "Phase 2 - Backend Ready ✅",
         "description": "Medical assistant that converses with patients and manages appointments",
         "features_completed": [
             "✅ REST API working",
-            "✅ Basic endpoints",
-            "✅ Automatic documentation",
-            "✅ CORS configured"
+            "✅ PostgreSQL database",
+            "✅ CRUD operations (users, appointments)",
+            "✅ Auto database initialization",
+            "✅ Statistics endpoint",
+            "✅ AI Chat Service" + (" (ENABLED ✨)" if chat_svc.is_available() else " (Waiting for API key)")
         ],
+        "ai_status": {
+            "available": chat_svc.is_available(),
+            "provider": chat_svc.provider if chat_svc.is_available() else "none",
+            "model": chat_svc.model_name if chat_svc.is_available() else "none",
+            "setup_guide": "Add OPENAI_API_KEY to .env file to enable AI" if not chat_svc.is_available() else "AI is ready!"
+        },
         "next_steps": [
-            "⏳ Connect to PostgreSQL",
+            "✅ Connect to PostgreSQL",
+            "✅ Add AI integration",
             "⏳ Add authentication (JWT)",
-            "⏳ Integrate AI (LangGraph + LLM)",
-            "⏳ Appointment system",
             "⏳ WebSocket for real-time chat",
             "⏳ Frontend with Next.js"
         ],
         "tech_stack": {
             "backend": "FastAPI",
-            "database": "PostgreSQL (coming soon)",
-            "ai": "LangGraph + LLM (coming soon)",
+            "database": "PostgreSQL (port 5433)",
+            "ai": f"LangChain + {chat_svc.provider} ({chat_svc.model_name})" if chat_svc.is_available() else "LangChain (not configured)",
             "frontend": "Next.js (coming soon)"
         }
     }
