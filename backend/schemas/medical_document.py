@@ -4,36 +4,23 @@ Pydantic schemas for medical documents
 from pydantic import BaseModel, Field
 from typing import Optional, List
 from datetime import datetime
-from enum import Enum
-
-
-class DocumentTypeEnum(str, Enum):
-    """Document type options"""
-    LAB_RESULT = "lab_result"
-    PRESCRIPTION = "prescription"
-    IMAGING = "imaging"
-    MEDICAL_REPORT = "medical_report"
-    VACCINATION_RECORD = "vaccination_record"
-    DISCHARGE_SUMMARY = "discharge_summary"
-    OTHER = "other"
+from models.medical_document import DocumentType
 
 
 # Request schemas
 class MedicalDocumentCreate(BaseModel):
-    """Create medical document (metadata)"""
-    document_type: DocumentTypeEnum
-    title: str = Field(..., min_length=1, max_length=255)
+    """Create medical document (text content)"""
+    document_type: DocumentType
+    title: Optional[str] = Field(None, max_length=200)
     description: Optional[str] = None
-    document_date: Optional[datetime] = None
+    text_content: str = Field(..., description="Text content of the document")
 
 
 class MedicalDocumentUpdate(BaseModel):
     """Update medical document"""
-    title: Optional[str] = Field(None, min_length=1, max_length=255)
+    title: Optional[str] = Field(None, max_length=200)
     description: Optional[str] = None
-    document_type: Optional[DocumentTypeEnum] = None
-    document_date: Optional[datetime] = None
-    is_archived: Optional[bool] = None
+    document_type: Optional[DocumentType] = None
 
 
 # Response schemas
@@ -41,32 +28,27 @@ class MedicalDocumentResponse(BaseModel):
     """Medical document response"""
     id: int
     user_id: int
-    document_type: DocumentTypeEnum
-    title: str
+    document_type: DocumentType
+    title: Optional[str]
     description: Optional[str]
-    file_name: str
-    file_size: int
-    mime_type: str
-    document_date: Optional[datetime]
-    is_processed: bool
-    has_embeddings: bool
-    is_archived: bool
+    filename: Optional[str]
+    file_path: Optional[str]
+    file_size: Optional[int]
+    mime_type: Optional[str]
+    processing_status: str
+    embeddings_created: bool
     created_at: datetime
     updated_at: datetime
     
-    class Config:
-        from_attributes = True
+    model_config = {
+        "from_attributes": True
+    }
 
 
-class MedicalDocumentList(BaseModel):
-    """List of medical documents"""
-    total: int
+class MedicalDocumentListResponse(BaseModel):
+    """Paginated list of medical documents"""
     documents: List[MedicalDocumentResponse]
+    total: int
+    skip: int
+    limit: int
 
-
-class DocumentUploadResponse(BaseModel):
-    """Response after uploading document"""
-    id: int
-    file_name: str
-    file_size: int
-    message: str

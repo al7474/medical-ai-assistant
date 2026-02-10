@@ -7,6 +7,7 @@ from sqlalchemy.ext.asyncio import AsyncSession
 from schemas.chat import ChatRequest, ChatResponse
 from services.chat_service import get_chat_service
 from services.medical_context_service import get_medical_context_service
+from services.document_processing_service import get_document_processing_service
 from models import User, MessageRole
 from api.deps import get_db, get_current_user
 
@@ -43,6 +44,7 @@ async def chat(
     # Get services
     chat_svc = get_chat_service()
     context_service = get_medical_context_service(db)
+    document_service = get_document_processing_service(db)
     
     # Get user medical context
     user_context = await context_service.get_full_context(
@@ -51,6 +53,17 @@ async def chat(
         history_limit=3
     )
     formatted_context = context_service.format_context_for_prompt(user_context)
+    
+    # Get relevant documents for RAG (if available)
+    rag_context = ""
+    try:
+        rag_context = await document_service.get_context_for_chat(
+            query=user_text,
+            user_id=current_user.id,
+            k=3  # Retrieve top 3 relevant documents
+        )
+    except Exception as e:
+        print(f"⚠️  RAG context retrieval failed: {e}")
     
     # Save user message
     conversation_id = None
@@ -65,8 +78,12 @@ async def chat(
     except Exception as e:
         print(f"⚠️  Failed to save user message: {e}")
     
-    # Get AI response with medical context
-    bot_response = await chat_svc.chat(user_text, formatted_context=formatted_context)
+    # Get AI response with medical context and RAG
+    bot_response = await chat_svc.chat(
+        user_text, 
+        formatted_context=formatted_context,
+        rag_context=rag_context if rag_context else None
+    )
     
     # Save AI response
     try:

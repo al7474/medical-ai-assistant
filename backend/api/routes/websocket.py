@@ -13,6 +13,7 @@ from models import User, MessageRole
 from services.websocket_manager import get_connection_manager
 from services.chat_service import get_chat_service
 from services.medical_context_service import get_medical_context_service
+from services.document_processing_service import get_document_processing_service
 from services.auth_service import verify_token
 from api.deps import get_db
 
@@ -136,6 +137,7 @@ async def websocket_chat(
     # Get services
     chat_service = get_chat_service()
     context_service = get_medical_context_service(db)
+    document_service = get_document_processing_service(db)
     
     # Get user medical context once at connection
     user_context = await context_service.get_full_context(user, include_history=True)
@@ -201,11 +203,23 @@ async def websocket_chat(
                 websocket
             )
             
-            # Get AI response with medical context
+            # Retrieve relevant documents for RAG (if available)
+            rag_context = ""
+            try:
+                rag_context = await document_service.get_context_for_chat(
+                    query=user_message,
+                    user_id=user.id,
+                    k=3  # Retrieve top 3 relevant documents
+                )
+            except Exception as e:
+                print(f"⚠️  RAG context retrieval failed: {e}")
+            
+            # Get AI response with medical context and RAG
             try:
                 bot_response = await chat_service.chat(
                     message=user_message, 
-                    formatted_context=formatted_context
+                    formatted_context=formatted_context,
+                    rag_context=rag_context if rag_context else None
                 )
             except Exception as e:
                 bot_response = f"Sorry, I encountered an error: {str(e)}"

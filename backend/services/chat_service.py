@@ -62,7 +62,8 @@ class ChatService:
         self, 
         message: str, 
         context: Optional[Dict[str, Any]] = None,
-        formatted_context: Optional[str] = None
+        formatted_context: Optional[str] = None,
+        rag_context: Optional[str] = None
     ) -> str:
         """
         Send a message to the AI and get a response
@@ -71,6 +72,7 @@ class ChatService:
             message: User's message
             context: Optional context dictionary (legacy support)
             formatted_context: Pre-formatted context string (preferred)
+            rag_context: Retrieved context from documents (RAG)
             
         Returns:
             AI's response as string
@@ -82,7 +84,8 @@ class ChatService:
             # Build system message with context
             system_prompt = self._build_system_prompt(
                 context=context,
-                formatted_context=formatted_context
+                formatted_context=formatted_context,
+                rag_context=rag_context
             )
             
             # Create messages
@@ -103,9 +106,10 @@ class ChatService:
     def _build_system_prompt(
         self, 
         context: Optional[Dict[str, Any]] = None,
-        formatted_context: Optional[str] = None
+        formatted_context: Optional[str] = None,
+        rag_context: Optional[str] = None
     ) -> str:
-        """Build system prompt with medical context"""
+        """Build system prompt with medical context and RAG documents"""
         base_prompt = """You are a helpful medical assistant AI. Your role is to:
 
 1. Answer general medical questions in a friendly, informative way
@@ -138,6 +142,11 @@ INTERACTION STYLE:
             user_info = context.get("user_info", "")
             if user_info:
                 base_prompt += f"\n\nUser context: {user_info}"
+        
+        # Add RAG context from documents if available
+        if rag_context:
+            base_prompt += f"\n\n{rag_context}"
+            base_prompt += "\n\nUSE DOCUMENT CONTEXT: The above documents contain the patient's medical records and history. Use this information to provide accurate, personalized advice based on their actual medical data."
         
         return base_prompt
     
