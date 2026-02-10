@@ -22,8 +22,9 @@ export default function ChatInterface({ onConnectionChange }: ChatInterfaceProps
   useEffect(() => {
     if (!token) return
 
-    // Initialize WebSocket
-    wsClient.current = new WebSocketClient(token)
+    // Initialize WebSocket with production URL
+    const wsUrl = process.env.NEXT_PUBLIC_WS_URL || 'ws://localhost:8000/ws/chat'
+    wsClient.current = new WebSocketClient(token, wsUrl)
     
     // Handle connection
     wsClient.current.onConnect(() => {
