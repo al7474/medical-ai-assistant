@@ -1,6 +1,25 @@
 # Medical AI Assistant - Backend
 
-REST API for an intelligent medical assistant.
+Professional REST API for an intelligent medical assistant.
+
+## 📁 Project Structure
+
+This backend follows a **modular, scalable architecture** with clear separation of concerns:
+
+```
+backend/
+├── main.py              # Application entry point
+├── config.py            # Configuration management
+├── database.py          # Database connection
+├── models/              # SQLAlchemy database models
+├── schemas/             # Pydantic validation schemas
+├── api/routes/          # API endpoints by domain
+├── services/            # Business logic services
+├── core/                # Application core (startup, etc.)
+└── scripts/             # Utility scripts
+```
+
+📚 **See [STRUCTURE.md](STRUCTURE.md) for detailed architecture documentation**
 
 ## 🚀 Quick Start
 
@@ -58,21 +77,44 @@ Once the server is running:
 
 ## 📋 Available Endpoints
 
-- `GET /` - Welcome
-- `GET /health` - System health
+### System
+- `GET /` - Welcome message
+- `GET /health` - System health check
+- `GET /info` - Project information and status
+- `GET /stats` - System statistics
 - `GET /hello/{name}` - Personalized greeting
-- `POST /chat` - Send message to bot
-- `GET /info` - Project information
-- `GET /test-responses` - See available responses
 
-## 🛠️ Next Steps
+### Users
+- `POST /users/` - Create a new user
+- `GET /users/` - List all users
 
-1. ✅ Basic backend working
-2. ⏳ Add database (PostgreSQL)
-3. ⏳ Authentication system (JWT)
-4. ⏳ Integrate AI (LangGraph + LLM)
-5. ⏳ WebSocket for real-time chat
-6. ⏳ Frontend with Next.js
+### Appointments
+- `POST /appointments/` - Create a new appointment
+- `GET /appointments/` - List all appointments
+- `GET /appointments/{id}` - Get specific appointment
+- `DELETE /appointments/{id}` - Delete an appointment
+
+### Chat
+- `POST /chat/` - Chat with AI assistant
+
+## 🛠️ Development Status
+
+- ✅ **Phase 1**: Professional backend structure
+- ✅ **Phase 2**: PostgreSQL database integration
+- ✅ **Phase 3**: AI integration (LangChain + OpenAI/Anthropic)
+- ✅ **Phase 4**: Code refactoring for scalability
+- ⏳ **Phase 5**: Authentication system (JWT)
+- ⏳ **Phase 6**: WebSocket for real-time chat
+- ⏳ **Phase 7**: Frontend with Next.js
+
+**Current Progress: ~70%**
+
+## 📚 Documentation
+
+- [STRUCTURE.md](STRUCTURE.md) - Detailed architecture documentation
+- [REFACTORING.md](REFACTORING.md) - Refactoring process and benefits
+- [AI_SETUP.md](AI_SETUP.md) - AI configuration guide
+- [SETUP.md](SETUP.md) - Initial setup instructions
 
 ## 🔧 Useful Commands
 
