@@ -1,47 +1,47 @@
-# 📋 FASE 2: Contexto del Usuario - COMPLETADO
+# 📋 PHASE 2: User Context - COMPLETED
 
-## ✅ Implementación Completada
+## ✅ Implementation Complete
 
-### 🧠 Servicio de Contexto Médico Creado
+### 🧠 Medical Context Service Created
 
-**Archivo:** `services/medical_context_service.py`
+**File:** `services/medical_context_service.py`
 
-#### Funcionalidades Principales:
+#### Main Features:
 
 1. **`get_full_context(user, include_history, history_limit)`**
-   - Recupera toda la información médica del usuario
-   - Incluye perfil médico completo
-   - Obtiene historial de conversaciones recientes
-   - Retorna diccionario estructurado
+   - Retrieves all user medical information
+   - Includes complete medical profile
+   - Gets recent conversation history
+   - Returns structured dictionary
 
 2. **`format_context_for_prompt(context)`**
-   - Convierte contexto en texto legible para AI
-   - Formato optimizado para prompts de sistema
-   - Incluye edad, BMI, alergias, medicamentos, historial
+   - Converts context to AI-readable text
+   - Optimized format for system prompts
+   - Includes age, BMI, allergies, medications, history
 
 3. **`save_conversation_message()`**
-   - Guarda mensajes automáticamente en BD
-   - Crea conversaciones automáticamente
-   - Guarda snapshot de contexto usado
-   - Registra metadata de AI (provider, model, tokens)
+   - Automatically saves messages to DB
+   - Automatically creates conversations
+   - Saves context snapshot used
+   - Records AI metadata (provider, model, tokens)
 
 4. **`create_conversation()`**
-   - Crea nuevas conversaciones
-   - Manejo de títulos automáticos
+   - Creates new conversations
+   - Automatic title handling
 
-### 🔄 Servicios Actualizados
+### 🔄 Updated Services
 
 #### **ChatService** (`services/chat_service.py`)
 
-**Cambios:**
-- Nuevo parámetro `formatted_context` en método `chat()`
-- Prompt del sistema mejorado con:
-  - Guías de seguridad médica detalladas
-  - Instrucciones de personalización
-  - Uso de contexto médico del paciente
-- Soporte para contexto formateado y legacy
+**Changes:**
+- New `formatted_context` parameter in `chat()` method
+- Enhanced system prompt with:
+  - Detailed medical safety guidelines
+  - Personalization instructions
+  - Patient medical context usage
+- Support for formatted and legacy context
 
-**Prompt del Sistema ahora incluye:**
+**System Prompt now includes:**
 ```
 PATIENT MEDICAL CONTEXT:
 - Patient: John Doe
@@ -50,117 +50,117 @@ PATIENT MEDICAL CONTEXT:
 - Allergies: Penicillin
 - Chronic Conditions: Asthma
 - Current Medications: Salbutamol 100mcg
-- Recent Conversation: [últimos mensajes]
+- Recent Conversation: [recent messages]
 ```
 
 #### **WebSocket Chat** (`api/routes/websocket.py`)
 
-**Cambios:**
-- Import de `MedicalContextService` y `MessageRole`
-- Obtiene contexto médico al conectar
-- Guarda todos los mensajes (user y assistant) en BD
-- Usa contexto médico en todas las respuestas
-- Mantiene `conversation_id` durante sesión
-- Guarda snapshot de contexto con cada respuesta
+**Changes:**
+- Imports `MedicalContextService` and `MessageRole`
+- Gets medical context on connection
+- Saves all messages (user and assistant) to DB
+- Uses medical context in all responses
+- Maintains `conversation_id` during session
+- Saves context snapshot with each response
 
-**Flujo actualizado:**
+**Updated flow:**
 ```
-1. Usuario conecta → Obtener contexto médico
-2. Usuario envía mensaje → Guardar en BD
-3. AI procesa con contexto → Generar respuesta
-4. Guardar respuesta AI en BD → Enviar al usuario
+1. User connects → Get medical context
+2. User sends message → Save to DB
+3. AI processes with context → Generate response
+4. Save AI response to DB → Send to user
 ```
 
 #### **Chat REST Endpoint** (`api/routes/chat.py`)
 
-**Cambios:**
-- Ahora requiere autenticación (JWT)
-- Obtiene contexto médico del usuario
-- Guarda conversaciones automáticamente
-- Usa contexto en respuestas
-- Documentación actualizada
+**Changes:**
+- Now requires authentication (JWT)
+- Gets user medical context
+- Automatically saves conversations
+- Uses context in responses
+- Updated documentation
 
-### 📊 Flujo Completo de Conversación
+### 📊 Complete Conversation Flow
 
 ```
 ┌─────────────┐
-│   Usuario   │
-│   se loguea │
+│    User     │
+│  logs in    │
 └──────┬──────┘
        │
        ▼
 ┌─────────────────────────┐
-│  Conecta a WebSocket/   │
-│  Envía mensaje REST     │
+│  Connects to WebSocket/ │
+│  Sends REST message     │
 └──────┬──────────────────┘
        │
        ▼
 ┌─────────────────────────────────┐
 │ MedicalContextService           │
 │ ────────────────────────────    │
-│ 1. Obtiene MedicalProfile       │
-│ 2. Obtiene historial reciente   │
-│ 3. Formatea para AI prompt      │
+│ 1. Gets MedicalProfile          │
+│ 2. Gets recent history          │
+│ 3. Formats for AI prompt        │
 └──────┬──────────────────────────┘
        │
        ▼
 ┌─────────────────────────────┐
-│ Guarda mensaje USER en BD   │
-│ (tabla: messages)            │
+│ Saves USER message to DB    │
+│ (table: messages)           │
 └──────┬──────────────────────┘
        │
        ▼
 ┌──────────────────────────────────┐
-│ ChatService                       │
-│ ──────────────────────────────   │
-│ Genera respuesta con:             │
-│ - Contexto médico personalizado  │
-│ - Historial de conversación      │
-│ - Guías de seguridad médica      │
+│ ChatService                      │
+│ ──────────────────────────────  │
+│ Generates response with:         │
+│ - Personalized medical context  │
+│ - Conversation history          │
+│ - Medical safety guidelines     │
 └──────┬───────────────────────────┘
        │
        ▼
 ┌─────────────────────────────────┐
-│ Guarda respuesta ASSISTANT      │
-│ + context_snapshot en BD         │
+│ Saves ASSISTANT response        │
+│ + context_snapshot to DB        │
 └──────┬──────────────────────────┘
        │
        ▼
 ┌─────────────┐
-│  Respuesta  │
-│  al usuario │
+│  Response   │
+│  to user    │
 └─────────────┘
 ```
 
-## 🎯 Beneficios Implementados
+## 🎯 Implemented Benefits
 
-### 1. **Personalización Total**
-- AI conoce alergias del paciente
-- Considera condiciones crónicas
-- Revisa medicamentos actuales
-- Ajusta respuestas según edad/BMI
+### 1. **Total Personalization**
+- AI knows patient allergies
+- Considers chronic conditions
+- Reviews current medications
+- Adjusts responses based on age/BMI
 
-### 2. **Memoria Persistente**
-- Todas las conversaciones guardadas
-- Historial accesible vía API
-- Contexto de conversaciones previas
-- Rating de respuestas
+### 2. **Persistent Memory**
+- All conversations saved
+- History accessible via API
+- Context from previous conversations
+- Response ratings
 
-### 3. **Seguridad Médica**
-- Advertencias apropiadas
-- Consideración de alergias
-- Referencias a medicamentos actuales
-- Guías de cuándo buscar atención médica
+### 3. **Medical Safety**
+- Appropriate warnings
+- Allergy considerations
+- Current medication references
+- Guidance on when to seek medical attention
 
-### 4. **Trazabilidad**
-- Cada mensaje guardado con timestamp
-- Metadata de AI (provider, model, tokens)
-- Snapshot de contexto usado
-- Posibilidad de auditoría
+### 4. **Traceability**
+- Each message saved with timestamp
+- AI metadata (provider, model, tokens)
+- Context snapshot used
+- Audit capability
 
-## 🧪 Cómo Probar
+## 🧪 How to Test
 
-### 1. Crear Perfil Médico
+### 1. Create Medical Profile
 
 ```bash
 POST /medical-profile/
@@ -171,13 +171,13 @@ Authorization: Bearer YOUR_TOKEN
   "height_cm": 175,
   "weight_kg": 70,
   "date_of_birth": "1994-05-15T00:00:00",
-  "allergies": ["Penicilina", "Mariscos"],
-  "chronic_conditions": ["Asma"],
+  "allergies": ["Penicillin", "Shellfish"],
+  "chronic_conditions": ["Asthma"],
   "current_medications": [
     {
       "name": "Salbutamol",
       "dosage": "100mcg",
-      "frequency": "2 veces al día"
+      "frequency": "Twice daily"
     }
   ],
   "smoking_status": "never",
@@ -185,20 +185,20 @@ Authorization: Bearer YOUR_TOKEN
 }
 ```
 
-### 2. Probar Chat con Contexto
+### 2. Test Chat with Context
 
 **WebSocket:**
 ```javascript
-// Conectar
+// Connect
 ws = new WebSocket('ws://localhost:8000/ws/chat?token=YOUR_TOKEN')
 
-// Enviar mensaje
+// Send message
 ws.send(JSON.stringify({
   "type": "message",
-  "text": "Tengo tos, ¿qué puedo tomar?"
+  "text": "I have a cough, what can I take?"
 }))
 
-// AI responderá considerando tu asma y alergia a penicilina
+// AI will respond considering your asthma and penicillin allergy
 ```
 
 **REST API:**
@@ -207,27 +207,27 @@ POST /chat/
 Authorization: Bearer YOUR_TOKEN
 
 {
-  "text": "¿Puedo tomar ibuprofeno?"
+  "text": "Can I take ibuprofen?"
 }
 
-# AI revisa tu perfil médico antes de responder
+# AI checks your medical profile before responding
 ```
 
-### 3. Ver Historial
+### 3. View History
 
 ```bash
 GET /conversations/
 Authorization: Bearer YOUR_TOKEN
 
-# Lista todas tus conversaciones
+# Lists all your conversations
 
 GET /conversations/{id}
 Authorization: Bearer YOUR_TOKEN
 
-# Ver conversación completa con mensajes
+# View complete conversation with messages
 ```
 
-### 4. Calificar Respuestas
+### 4. Rate Responses
 
 ```bash
 POST /conversations/{conv_id}/messages/{msg_id}/rate
@@ -238,70 +238,70 @@ Authorization: Bearer YOUR_TOKEN
 }
 ```
 
-## 📝 Ejemplo de Respuesta Personalizada
+## 📝 Personalized Response Example
 
-**Sin Contexto (antes):**
+**Without Context (before):**
 ```
-Usuario: "Tengo tos"
-AI: "La tos puede tener muchas causas. Te recomiendo ver a un doctor."
-```
-
-**Con Contexto (ahora):**
-```
-Usuario: "Tengo tos"
-AI: "Hola Juan, veo que tienes asma en tu historial médico. 
-La tos puede ser un síntoma de tu asma. ¿Estás usando tu 
-Salbutamol como prescrito? Si la tos empeora o tienes 
-dificultad para respirar, busca atención médica inmediata.
-Evita cualquier medicamento con penicilina debido a tu alergia."
+User: "I have a cough"
+AI: "Cough can have many causes. I recommend seeing a doctor."
 ```
 
-## 🔍 Verificación de Base de Datos
+**With Context (now):**
+```
+User: "I have a cough"
+AI: "Hello John, I see you have asthma in your medical history. 
+The cough could be a symptom of your asthma. Are you using your 
+Salbutamol as prescribed? If the cough worsens or you have 
+difficulty breathing, seek immediate medical attention.
+Avoid any medication with penicillin due to your allergy."
+```
 
-Las conversaciones se guardan automáticamente:
+## 🔍 Database Verification
+
+Conversations are automatically saved:
 
 ```sql
--- Ver conversaciones de un usuario
+-- View user conversations
 SELECT * FROM conversations WHERE user_id = 1;
 
--- Ver mensajes de una conversación
+-- View conversation messages
 SELECT id, role, content, ai_provider, created_at 
 FROM messages 
 WHERE conversation_id = 1 
 ORDER BY created_at;
 
--- Ver contexto usado en una respuesta
+-- View context used in a response
 SELECT context_snapshot 
 FROM messages 
 WHERE role = 'assistant' 
 LIMIT 1;
 ```
 
-## 🎉 Estado Actual
+## 🎉 Current Status
 
-✅ **Contexto médico integrado**
-✅ **Conversaciones auto-guardadas**
-✅ **Historial accesible**
-✅ **Respuestas personalizadas**
-✅ **Trazabilidad completa**
+✅ **Medical context integrated**
+✅ **Conversations auto-saved**
+✅ **History accessible**
+✅ **Personalized responses**
+✅ **Complete traceability**
 
-## 🚀 Próximos Pasos (Fase 3)
+## 🚀 Next Steps (Phase 3)
 
-Con el contexto funcionando, ahora podemos implementar:
+With context working, we can now implement:
 
 1. **RAG (Retrieval Augmented Generation)**
-   - Vector store para documentos médicos
-   - Búsqueda semántica de información
-   - Integración con documentos del usuario
+   - Vector store for medical documents
+   - Semantic information search
+   - Integration with user documents
 
-2. **Análisis de Documentos**
-   - Procesar PDFs médicos
-   - Extraer información relevante
-   - Crear embeddings para RAG
+2. **Document Analysis**
+   - Process medical PDFs
+   - Extract relevant information
+   - Create embeddings for RAG
 
-3. **Mejoras en Contexto**
-   - Resúmenes automáticos de conversaciones
-   - Detección de cambios en salud
-   - Alertas basadas en historial
+3. **Context Improvements**
+   - Automatic conversation summaries
+   - Health change detection
+   - History-based alerts
 
-¿Listo para continuar con Fase 3 (RAG)? 🎯
+Ready to continue with Phase 3 (RAG)? 🎯

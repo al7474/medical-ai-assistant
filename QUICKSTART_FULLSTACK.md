@@ -1,218 +1,218 @@
-# 🚀 Guía de Inicio Rápido - Full Stack
+# 🚀 Full Stack Quick Start Guide
 
-## ✅ Lo que tienes funcionando
+## ✅ What You Have Running
 
-1. **Backend** (puerto 8000) ✅
-   - API REST con FastAPI
+1. **Backend** (port 8000) ✅
+   - REST API with FastAPI
    - PostgreSQL database
-   - Autenticación JWT
+   - JWT Authentication
    - WebSocket real-time chat
    - AI integration
 
-2. **Frontend** (puerto 3000) ✅  
-   - Next.js 14 con TypeScript
-   - Interfaz moderna con Tailwind CSS
-   - Login y registro
-   - Chat en tiempo real
-   - WebSocket conectado
+2. **Frontend** (port 3000) ✅  
+   - Next.js 14 with TypeScript
+   - Modern interface with Tailwind CSS
+   - Login and registration
+   - Real-time chat
+   - WebSocket connected
 
-## 🎯 Cómo Probar Todo
+## 🎯 How to Test Everything
 
-### Opción 1: Usar la Interfaz Web (Recomendado)
+### Option 1: Use the Web Interface (Recommended)
 
-1. **Abre el navegador:**
+1. **Open your browser:**
    ```
    http://localhost:3000
    ```
 
-2. **Regístrate:**
-   - Click en "Registrarse"
-   - Completa el formulario
-   - Se creará tu cuenta automáticamente
+2. **Register:**
+   - Click "Registrarse" (Sign up)
+   - Complete the form
+   - Your account will be created automatically
 
-3. **Inicia sesión:**
-   - Te redirigirá automáticamente al dashboard
-   - O ve a "Iniciar Sesión" si ya tienes cuenta
+3. **Log in:**
+   - You'll be automatically redirected to the dashboard
+   - Or go to "Iniciar Sesión" (Login) if you already have an account
 
-4. **Chatea con la IA:**
-   - En el dashboard verás el chat
-   - Escribe un mensaje como: "Hola, ¿qué haces?"
-   - La IA te responderá en tiempo real vía WebSocket
-   - Verás indicadores de "escribiendo..." mientras procesa
+4. **Chat with the AI:**
+   - In the dashboard you'll see the chat
+   - Type a message like: "Hola, ¿qué haces?"
+   - The AI will respond in real-time via WebSocket
+   - You'll see "typing..." indicators while processing
 
-### Opción 2: Probar el Backend Directamente
+### Option 2: Test Backend Directly
 
 1. **API Docs (Swagger):**
    ```
    http://localhost:8000/docs
    ```
 
-2. **Test Client WebSocket:**
+2. **WebSocket Test Client:**
    ```
    http://localhost:8000/ws/test-client
    ```
 
-## 📋 Verificar que Todo Funciona
+## 📋 Verify Everything Works
 
 ### Backend Checklist
 
 ```bash
-# 1. Backend corriendo
+# 1. Backend running
 curl http://localhost:8000/health
 
-# 2. Base de datos conectada
+# 2. Database connected
 curl http://localhost:8000/stats
 
-# 3. WebSocket disponible
-# Usa el test client: http://localhost:8000/ws/test-client
+# 3. WebSocket available
+# Use the test client: http://localhost:8000/ws/test-client
 ```
 
 ### Frontend Checklist
 
-- ✅ Home page carga en http://localhost:3000
-- ✅ Puedes navegar a /login y /register
-- ✅ Puedes crear una cuenta
-- ✅ Puedes iniciar sesión
-- ✅ El dashboard muestra el chat
-- ✅ WebSocket se conecta (indicador verde)
-- ✅ Puedes enviar mensajes
-- ✅ Recibes respuestas de la IA
+- ✅ Home page loads at http://localhost:3000
+- ✅ You can navigate to /login and /register
+- ✅ You can create an account
+- ✅ You can log in
+- ✅ Dashboard shows the chat
+- ✅ WebSocket connects (green indicator)
+- ✅ You can send messages
+- ✅ You receive AI responses
 
-## 🔧 Comandos Útiles
+## 🔧 Useful Commands
 
 ### Backend
 ```bash
-# Iniciar backend
+# Start backend
 cd backend
 uvicorn main:app --reload
 
-# Ejecutar tests
+# Run tests
 python test_auth.py
 python test_websocket.py
 ```
 
 ### Frontend
 ```bash
-# Iniciar frontend
+# Start frontend
 cd frontend
 npm run dev
 
-# Build para producción
+# Build for production
 npm run build
 npm start
 ```
 
-## 🎨 Funcionalidades Implementadas
+## 🎨 Implemented Features
 
-### Autenticación
-- ✅ Registro de usuarios con validación
-- ✅ Login con JWT (tokens de 7 días)
+### Authentication
+- ✅ User registration with validation
+- ✅ Login with JWT (7-day tokens)
 - ✅ Logout
-- ✅ Rutas protegidas
-- ✅ Persistencia de sesión (localStorage)
+- ✅ Protected routes
+- ✅ Session persistence (localStorage)
 
-### Chat en Tiempo Real
-- ✅ WebSocket bidireccional
-- ✅ Autenticación por token
-- ✅ Múltiples usuarios simultáneos
-- ✅ Indicadores de estado de conexión
-- ✅ Indicadores de "escribiendo..."
-- ✅ Integración con AI (OpenAI/Anthropic o fallback)
+### Real-time Chat
+- ✅ Bidirectional WebSocket
+- ✅ Token-based authentication
+- ✅ Multiple simultaneous users
+- ✅ Connection status indicators
+- ✅ "Typing..." indicators
+- ✅ AI integration (OpenAI/Anthropic or fallback)
 
 ### UI/UX
-- ✅ Diseño moderno y responsive
-- ✅ Animaciones suaves
-- ✅ Feedback visual en todo momento
-- ✅ Manejo de errores amigable
-- ✅ Auto-scroll en chat
+- ✅ Modern and responsive design
+- ✅ Smooth animations
+- ✅ Visual feedback at all times
+- ✅ User-friendly error handling
+- ✅ Auto-scroll in chat
 
-## 🐛 Solución de Problemas
+## 🐛 Troubleshooting
 
-### Frontend no carga
+### Frontend doesn't load
 
 ```bash
-# Ir a la carpeta correcta
+# Go to the correct folder
 cd C:\Users\al\Downloads\P\personal\GitDesk\medical-ai-assistant\frontend
 
-# Reinstalar dependencias
+# Reinstall dependencies
 npm install
 
-# Iniciar servidor
+# Start server
 npm run dev
 ```
 
-### Backend no conecta
+### Backend doesn't connect
 
 ```bash
-# Verificar que backend esté corriendo
-# En otra terminal:
+# Verify backend is running
+# In another terminal:
 cd backend
 uvicorn main:app --reload
 ```
 
-### WebSocket no conecta
+### WebSocket doesn't connect
 
-1. Verifica que estés autenticado (inicia sesión)
-2. Verifica que el backend esté corriendo
-3. Revisa la consola del navegador (F12)
-4. El indicador debe estar verde cuando conectado
+1. Verify you're authenticated (log in)
+2. Verify backend is running
+3. Check browser console (F12)
+4. Indicator should be green when connected
 
-### Error de CORS
+### CORS Error
 
-El backend ya tiene CORS configurado para `localhost:3000`.  
-Si cambias el puerto del frontend, actualiza `backend/main.py`:
+Backend already has CORS configured for `localhost:3000`.  
+If you change the frontend port, update `backend/main.py`:
 
 ```python
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=["http://localhost:3000"],  # ← Cambia aquí
+    allow_origins=["http://localhost:3000"],  # ← Change here
     ...
 )
 ```
 
-## 🌟 Próximos Pasos
+## 🌟 Next Steps
 
-1. **Probar todo el sistema** ✅ (¡estás aquí!)
-2. **Configurar API key de OpenAI** (opcional, para IA real)
-3. **Añadir más features:**
-   - Historial de conversaciones
-   - Múltiples salas de chat
-   - Upload de archivos
-   - Notificaciones
-4. **Deploy a producción:**
+1. **Test the whole system** ✅ (you're here!)
+2. **Configure OpenAI API key** (optional, for real AI)
+3. **Add more features:**
+   - Conversation history
+   - Multiple chat rooms
+   - File upload
+   - Notifications
+4. **Deploy to production:**
    - Frontend → Vercel
    - Backend → Railway/Heroku/AWS
-   - Database → PostgreSQL managed
+   - Database → Managed PostgreSQL
 
-## 📊 Estado del Proyecto
+## 📊 Project Status
 
-**Progreso: ~85%** 🎉
+**Progress: ~85%** 🎉
 
-- [x] Backend API REST
+- [x] Backend REST API
 - [x] PostgreSQL database
 - [x] AI integration (LangChain)
-- [x] Autenticación JWT
+- [x] JWT Authentication
 - [x] WebSocket real-time
-- [x] Frontend Next.js
-- [x] UI moderna
-- [x] Integración completa
-- [ ] Deploy a producción
-- [ ] Features avanzadas
+- [x] Next.js Frontend
+- [x] Modern UI
+- [x] Complete integration
+- [ ] Production deployment
+- [ ] Advanced features
 
-## 🎉 ¡Felicitaciones!
+## 🎉 Congratulations!
 
-Tienes un **asistente médico con IA completamente funcional** con:
+You have a **fully functional AI medical assistant** with:
 - ✨ Full-stack (Frontend + Backend)
-- 🔐 Autenticación segura
-- 💬 Chat en tiempo real
-- 🤖 Integración con IA
-- 🎨 UI moderna y profesional
+- 🔐 Secure authentication
+- 💬 Real-time chat
+- 🤖 AI integration
+- 🎨 Modern and professional UI
 
 ---
 
-**¿Preguntas?** Revisa:
-- [README.md](README.md) - Overview general
-- [backend/README.md](backend/README.md) - Documentación backend
-- [backend/AUTHENTICATION.md](backend/AUTHENTICATION.md) - Sistema de auth
-- [backend/WEBSOCKET.md](backend/WEBSOCKET.md) - Chat en tiempo real
-- [frontend/README.md](frontend/README.md) - Documentación frontend
+**Questions?** Check out:
+- [README.md](README.md) - General overview
+- [backend/README.md](backend/README.md) - Backend documentation
+- [backend/AUTHENTICATION.md](backend/AUTHENTICATION.md) - Auth system
+- [backend/WEBSOCKET.md](backend/WEBSOCKET.md) - Real-time chat
+- [frontend/README.md](frontend/README.md) - Frontend documentation

@@ -1,141 +1,141 @@
-# ✅ FASE 3 COMPLETADA - AI Integration
+# ✅ PHASE 3 COMPLETED - AI Integration
 
-## 🎉 ¿Qué se ha completado?
+## 🎉 What Has Been Completed?
 
-### Paso 1: Arreglo Básico ✅
-1. ✅ Dependencias agregadas (SQLAlchemy, asyncpg, psycopg2)
-2. ✅ Archivo `.env.example` creado
-3. ✅ Script `init_db.py` mejorado
-4. ✅ CRUD completo de Appointments
-5. ✅ Guía de setup detallada ([SETUP.md](backend/SETUP.md))
-6. ✅ **Problema del puerto 5432 resuelto** (ahora usa 5433)
+### Step 1: Basic Setup ✅
+1. ✅ Dependencies added (SQLAlchemy, asyncpg, psycopg2)
+2. ✅ `.env.example` file created
+3. ✅ `init_db.py` script improved
+4. ✅ Complete Appointments CRUD
+5. ✅ Detailed setup guide ([SETUP.md](backend/SETUP.md))
+6. ✅ **Port 5432 issue resolved** (now uses 5433)
 
-### Paso 2: Mejoras Automáticas ✅
-1. ✅ **Inicialización automática de base de datos** al iniciar la API
-2. ✅ **Warnings de Pydantic corregidos** (orm_mode → from_attributes)
-3. ✅ **Endpoint de estadísticas** agregado (`/stats`)
-4. ✅ **Guía rápida de uso** ([QUICKSTART.md](QUICKSTART.md))
-5. ✅ **Mejor manejo de errores** en startup
+### Step 2: Automatic Improvements ✅
+1. ✅ **Automatic database initialization** on API startup
+2. ✅ **Pydantic warnings fixed** (orm_mode → from_attributes)
+3. ✅ **Statistics endpoint** added (`/stats`)
+4. ✅ **Quick start guide** ([QUICKSTART.md](QUICKSTART.md))
+5. ✅ **Better error handling** in startup
 
-### Paso 3: Integración de IA 🤖✨
-1. ✅ **LangChain integrado** con soporte para múltiples proveedores
-2. ✅ **OpenAI GPT** (GPT-3.5, GPT-4) configurado
-3. ✅ **Anthropic Claude** (Claude 3 Sonnet, Opus, Haiku) configurado
-4. ✅ **Endpoint /chat actualizado** con IA real
-5. ✅ **Sistema de fallback inteligente** (funciona sin API key)
-6. ✅ **Prompts médicos especializados**
-7. ✅ **Guía completa de configuración** ([AI_SETUP.md](AI_SETUP.md))
-8. ✅ **Script de prueba de IA** (test_ai_chat.py)
+### Step 3: AI Integration 🤖✨
+1. ✅ **LangChain integrated** with multi-provider support
+2. ✅ **OpenAI GPT** (GPT-3.5, GPT-4) configured
+3. ✅ **Anthropic Claude** (Claude 3 Sonnet, Opus, Haiku) configured
+4. ✅ **/chat endpoint updated** with real AI
+5. ✅ **Intelligent fallback system** (works without API key)
+6. ✅ **Specialized medical prompts**
+7. ✅ **Complete configuration guide** ([AI_SETUP.md](AI_SETUP.md))
+8. ✅ **AI test script** (test_ai_chat.py)
 
 ---
 
-## 🚀 Cómo Usar el Proyecto Ahora
+## 🚀 How to Use the Project Now
 
 ```powershell
-# Solo 2 comandos:
+# Just 2 commands:
 docker-compose up -d
 cd backend && python -m uvicorn main:app --reload
 ```
 
-**¡La base de datos se crea automáticamente!** Ya no necesitas ejecutar `init_db.py`.
+**Database is created automatically!** No need to run `init_db.py`.
 
-**Probar:** http://localhost:8000/docs
+**Test it:** http://localhost:8000/docs
 
 ---
 
-## 📊 Estado del Proyecto Actualizado
+## 📊 Updated Project Status
 
-### ✅ COMPLETO (Backend ~65%)
-- [x] API REST funcionando
-- [x] Endpoints básicos y CRUD completo
-- [x] PostgreSQL con Docker (puerto 5433)
-- [x] Modelos de base de datos (User, Appointment)
-- [x] **Inicialización automática**
-- [x] **Endpoint de estadísticas**
-- [x] **Sin warnings técnicos**
-- [x] **AI Chat Service con LangChain** 🤖
-- [x] **Soporte OpenAI GPT + Anthropic Claude** 🆕
-- [x] **Sistema de fallback inteligente** 🆕
-- [x] Documentación completa (README, SETUP, QUICKSTART, AI_SETUP)
-- [x] Scripts de prueba
+### ✅ COMPLETE (Backend ~65%)
+- [x] REST API working
+- [x] Basic endpoints and complete CRUD
+- [x] PostgreSQL with Docker (port 5433)
+- [x] Database models (User, Appointment)
+- [x] **Automatic initialization**
+- [x] **Statistics endpoint**
+- [x] **No technical warnings**
+- [x] **AI Chat Service with LangChain** 🤖
+- [x] **OpenAI GPT + Anthropic Claude support** 🆕
+- [x] **Intelligent fallback system** 🆕
+- [x] Complete documentation (README, SETUP, QUICKSTART, AI_SETUP)
+- [x] Test scripts
 
-### ⏳ PENDIENTE (Para 100%)
+### ⏳ PENDING (For 100%)
 
-**Fase 2: Autenticación (20%)**
-- [ ] Sistema de registro
-- [ ] Login con JWT
-- [ ] Protección de endpoints
-- [ ] Hash de contraseñas
+**Phase 2: Authentication (20%)**
+- [ ] Registration system
+- [ ] Login with JWT
+- [ ] Protected endpoints
+- [ ] Password hashing
 
-**Fase 3: Frontend (20%)**
-- [ ] Crear proyecto Next.js
-- [ ] Interfaz de usuario
-- [ ] Formularios de registro/login
-- [ ] Vista de citas
+**Phase 3: Frontend (20%)**
+- [ ] Create Next.js project
+- [ ] User interface
+- [ ] Registration/login forms
+- [ ] Appointments view
 
-**Fase 4: IA (15%)**
-- [ ] Integrar LangGraph
-- [ ] Conectar LLM (OpenAI/Anthropic)
-- [ ] Procesamiento de lenguaje natural
-- [ ] Sistema de chat inteligente
+**Phase 4: AI (15%)**
+- [ ] Integrate LangGraph
+- [ ] Connect LLM (OpenAI/Anthropic)
+- [ ] Natural language processing
+- [ ] Intelligent chat system
 
-**Fase 5: Mejoras (5%)**
-- [ ] WebSocket para chat en tiempo real
+**Phase 5: Improvements (5%)**
+- [ ] WebSocket for real-time chat
 - [ ] Redis cache
-- [ ] Tests unitarios
+- [ ] Unit tests
 - [ ] Deployment
 
 ---
 
-## 🎯 Resumen
+## 🎯 Summary
 
-**Progreso inicial:** ~15%  
-**Después Paso 1:** ~40%  
-**Después Paso 2:** ~50%  
-**Después Paso 3 (actual):** ~65% ✅  
-**Próximo (con Auth):** ~80%  
-**Para ser 100% funcional:** Todas las fases completas
+**Initial progress:** ~15%  
+**After Step 1:** ~40%  
+**After Step 2:** ~50%  
+**After Step 3 (current):** ~65% ✅  
+**Next (with Auth):** ~80%  
+**To be 100% functional:** All phases complete
 
-### Lo que FUNCIONA ahora:
-✅ Backend completo con PostgreSQL funcionando  
-✅ CRUD completo de usuarios y citas  
-✅ Inicialización automática de base de datos  
-✅ Sistema de estadísticas  
-✅ **AI Chat con LangChain (OpenAI/Anthropic)** 🤖✨  
-✅ **Chat inteligente con contexto médico** 🆕  
-✅ **Fallback sin API key** 🆕  
-✅ API documentada y probada en Swagger  
-✅ Docker configurado correctamente (puerto 5433)  
+### What WORKS now:
+✅ Complete backend with PostgreSQL running  
+✅ Complete CRUD for users and appointments  
+✅ Automatic database initialization  
+✅ Statistics system  
+✅ **AI Chat with LangChain (OpenAI/Anthropic)** 🤖✨  
+✅ **Intelligent chat with medical context** 🆕  
+✅ **Fallback without API key** 🆕  
+✅ API documented and tested in Swagger  
+✅ Docker properly configured (port 5433)  
 
-### Lo que FALTA:
-⚠️ **Configurar API key** (5 minutos - opcional)  
-❌ Autenticación (JWT, login, registro)  
-❌ Interfaz de usuario (Frontend con Next.js)  
-❌ Memoria de conversación (guardar historial)  
-❌ WebSocket para tiempo real  
+### What's MISSING:
+⚠️ **Configure API key** (5 minutes - optional)  
+❌ Authentication (JWT, login, registration)  
+❌ User interface (Frontend with Next.js)  
+❌ Conversation memory (save history)  
+❌ WebSocket for real-time  
 
 ---
 
-## 🤔 ¿Siguiente paso?
+## 🤔 Next Step?
 
-### Opción A: Habilitar IA (5 minutos) 🤖
-Agregar tu API key para activar la IA:
-1. Obtener clave de OpenAI o Anthropic
-2. Agregar a archivo .env
-3. Reiniciar servidor
-📖 Guía: [AI_SETUP.md](AI_SETUP.md)
+### Option A: Enable AI (5 minutes) 🤖
+Add your API key to activate AI:
+1. Get key from OpenAI or Anthropic
+2. Add to .env file
+3. Restart server
+📖 Guide: [AI_SETUP.md](AI_SETUP.md)
 
-### Opción B: Autenticación 🔐
-Agregar sistema completo de:
-- Registro de usuarios con contraseña
-- Login con JWT tokens
-- Protección de endpoints
-- Middleware de autenticación
+### Option B: Authentication 🔐
+Add complete system for:
+- User registration with password
+- Login with JWT tokens
+- Protected endpoints
+- Authentication middleware
 
-### Opción C: Frontend 🎨
-Crear interfaz con Next.js:
-- Formularios de usuarios/citas
-- Chat UI en tiempo real
-- Dashboard básico
+### Option C: Frontend 🎨
+Create interface with Next.js:
+- User/appointment forms
+- Real-time chat UI
+- Basic dashboard
 
-**¿Qué prefieres?** 🚀
+**What do you prefer?** 🚀
