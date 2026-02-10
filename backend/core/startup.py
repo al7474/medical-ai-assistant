@@ -17,19 +17,22 @@ async def init_database():
             print("🔄 Creating tables if they don't exist...")
             await conn.run_sync(models.Base.metadata.create_all)
         print("✅ Database ready!")
+        return True
     except OperationalError as e:
-        print(f"❌ Database connection failed: {e}")
-        print("⚠️  Make sure PostgreSQL is running (docker-compose up -d)")
-        raise
+        print(f"⚠️  Database connection failed: {e}")
+        print("⚠️  Server will start but database operations will fail")
+        print("⚠️  Make sure DATABASE_URL is correct and database is accessible")
+        return False
     except Exception as e:
-        print(f"❌ Unexpected error during database initialization: {e}")
-        raise
+        print(f"⚠️  Unexpected error during database initialization: {e}")
+        print("⚠️  Server will start but database operations may fail")
+        return False
 
 
 @asynccontextmanager
 async def lifespan(app: FastAPI):
     """Lifespan context manager for startup and shutdown events"""
-    # Startup
+    # Startup - don't fail if database is not ready
     await init_database()
     yield
     # Shutdown
