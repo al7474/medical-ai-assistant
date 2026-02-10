@@ -27,9 +27,5 @@ USER appuser
 # Expose port (Railway uses dynamic $PORT)
 EXPOSE 8000
 
-# Health check
-HEALTHCHECK --interval=30s --timeout=10s --start-period=5s --retries=3 \
-    CMD python -c "import requests; requests.get('http://localhost:8000/health')" || true
-
 # Run the application (Railway provides $PORT)
 CMD uvicorn main:app --host 0.0.0.0 --port ${PORT:-8000}
