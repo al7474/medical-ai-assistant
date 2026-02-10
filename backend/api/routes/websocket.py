@@ -9,9 +9,10 @@ from typing import Optional
 import json
 from datetime import datetime
 
-from models import User
+from models import User, MessageRole
 from services.websocket_manager import get_connection_manager
 from services.chat_service import get_chat_service
+from services.medical_context_service import get_medical_context_service
 from services.auth_service import verify_token
 from api.deps import get_db
 
@@ -132,8 +133,16 @@ async def websocket_chat(
         websocket
     )
     
-    # Get AI service
+    # Get services
     chat_service = get_chat_service()
+    context_service = get_medical_context_service(db)
+    
+    # Get user medical context once at connection
+    user_context = await context_service.get_full_context(user, include_history=True)
+    formatted_context = context_service.format_context_for_prompt(user_context)
+    
+    # Create or get active conversation
+    conversation_id = None
     
     try:
         while True:
@@ -156,7 +165,6 @@ async def websocket_chat(
             # Extract message details
             message_type = message_data.get("type", "message")
             user_message = message_data.get("text", "")
-            context = message_data.get("context", {})
             
             if not user_message:
                 await manager.send_personal_message(
@@ -169,12 +177,19 @@ async def websocket_chat(
                 )
                 continue
             
-            # Add user info to context
-            context.update({
-                "user_id": user.id,
-                "user_name": user.name,
-                "user_email": user.email
-            })
+            # Save user message to database
+            try:
+                user_msg_record = await context_service.save_conversation_message(
+                    user_id=user.id,
+                    role=MessageRole.USER,
+                    content=user_message,
+                    conversation_id=conversation_id
+                )
+                # Get conversation ID from first message
+                if not conversation_id:
+                    conversation_id = user_msg_record.conversation_id
+            except Exception as e:
+                print(f"⚠️  Failed to save user message: {e}")
             
             # Send typing indicator
             await manager.send_personal_message(
@@ -186,11 +201,28 @@ async def websocket_chat(
                 websocket
             )
             
-            # Get AI response
+            # Get AI response with medical context
             try:
-                bot_response = await chat_service.chat(user_message, context)
+                bot_response = await chat_service.chat(
+                    message=user_message, 
+                    formatted_context=formatted_context
+                )
             except Exception as e:
                 bot_response = f"Sorry, I encountered an error: {str(e)}"
+            
+            # Save AI response to database
+            try:
+                await context_service.save_conversation_message(
+                    user_id=user.id,
+                    role=MessageRole.ASSISTANT,
+                    content=bot_response,
+                    conversation_id=conversation_id,
+                    ai_provider=chat_service.provider if chat_service.is_available() else "fallback",
+                    ai_model=chat_service.model_name if chat_service.is_available() else "simple",
+                    context_snapshot=formatted_context[:500]  # Save truncated context
+                )
+            except Exception as e:
+                print(f"⚠️  Failed to save AI response: {e}")
             
             # Send response
             await manager.send_personal_message(

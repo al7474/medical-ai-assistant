@@ -58,13 +58,19 @@ class ChatService:
         """Check if AI service is available"""
         return self.llm is not None
     
-    async def chat(self, message: str, context: Optional[Dict[str, Any]] = None) -> str:
+    async def chat(
+        self, 
+        message: str, 
+        context: Optional[Dict[str, Any]] = None,
+        formatted_context: Optional[str] = None
+    ) -> str:
         """
         Send a message to the AI and get a response
         
         Args:
             message: User's message
-            context: Optional context (user info, medical history, etc.)
+            context: Optional context dictionary (legacy support)
+            formatted_context: Pre-formatted context string (preferred)
             
         Returns:
             AI's response as string
@@ -74,7 +80,10 @@ class ChatService:
         
         try:
             # Build system message with context
-            system_prompt = self._build_system_prompt(context)
+            system_prompt = self._build_system_prompt(
+                context=context,
+                formatted_context=formatted_context
+            )
             
             # Create messages
             messages = [
@@ -91,24 +100,41 @@ class ChatService:
             print(f"❌ AI Chat error: {e}")
             return f"Sorry, I encountered an error: {str(e)}"
     
-    def _build_system_prompt(self, context: Optional[Dict[str, Any]] = None) -> str:
-        """Build system prompt with context"""
+    def _build_system_prompt(
+        self, 
+        context: Optional[Dict[str, Any]] = None,
+        formatted_context: Optional[str] = None
+    ) -> str:
+        """Build system prompt with medical context"""
         base_prompt = """You are a helpful medical assistant AI. Your role is to:
-        
+
 1. Answer general medical questions in a friendly, informative way
-2. Help users schedule appointments
-3. Provide information about symptoms and conditions
+2. Help users understand their health conditions and medications
+3. Provide information about symptoms and when to seek care
 4. Be empathetic and professional
+5. Use the patient's medical history to provide personalized advice
 
-IMPORTANT:
-- You are NOT a replacement for professional medical advice
-- Always recommend consulting with a healthcare provider for serious concerns
-- Be clear when something requires immediate medical attention
-- Maintain patient confidentiality
+CRITICAL SAFETY GUIDELINES:
+- You are NOT a replacement for professional medical diagnosis or treatment
+- Always recommend consulting with a healthcare provider for diagnosis and treatment
+- Be clear when something requires immediate medical attention (e.g., chest pain, difficulty breathing, severe bleeding)
+- Never suggest stopping or changing medications without consulting a doctor
+- Maintain patient confidentiality and privacy
 
-Keep responses concise but informative."""
+INTERACTION STYLE:
+- Be warm, empathetic, and professional
+- Acknowledge the patient's concerns
+- Reference their medical history when relevant (allergies, conditions, medications)
+- Provide clear, actionable information
+- Keep responses concise but informative (2-3 paragraphs max)
+- Ask clarifying questions when needed"""
 
-        if context:
+        # Add formatted medical context if available
+        if formatted_context:
+            base_prompt += f"\n\n{'='*50}\nPATIENT MEDICAL CONTEXT:\n{'='*50}\n{formatted_context}\n{'='*50}"
+            base_prompt += "\n\nIMPORTANT: Use this context to personalize your responses. Reference allergies when discussing medications, consider chronic conditions when giving advice, etc."
+        elif context:
+            # Legacy support for old context format
             user_info = context.get("user_info", "")
             if user_info:
                 base_prompt += f"\n\nUser context: {user_info}"
