@@ -16,6 +16,8 @@ export default function LoginPage() {
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
+    e.stopPropagation()
+    
     setError('')
     setLoading(true)
 
@@ -43,16 +45,15 @@ export default function LoginPage() {
       let errorMessage = 'Error al iniciar sesión'
       
       if (err.code === 'ERR_NETWORK' || err.message?.includes('Network')) {
-        errorMessage = 'No se puede conectar al servidor'
+        errorMessage = '❌ No se puede conectar al servidor'
       } else if (err.response?.status === 401) {
-        errorMessage = 'Email o contraseña incorrectos'
+        errorMessage = '❌ Email o contraseña incorrectos'
       } else if (err.response?.data?.detail) {
         const detail = err.response.data.detail
         errorMessage = typeof detail === 'string' ? detail : detail[0]?.msg || errorMessage
       }
       
       setError(errorMessage)
-    } finally {
       setLoading(false)
     }
   }
@@ -77,9 +78,12 @@ export default function LoginPage() {
         {/* Form */}
         <div className="bg-white rounded-2xl shadow-xl p-8">
           {error && (
-            <div className="mb-6 p-4 bg-red-50 border border-red-200 rounded-lg flex items-start gap-3">
+            <div className="mb-6 p-4 bg-red-50 border-2 border-red-500 rounded-lg flex items-start gap-3 animate-shake">
               <AlertCircle className="w-5 h-5 text-red-600 flex-shrink-0 mt-0.5" />
-              <p className="text-sm text-red-800">{error}</p>
+              <div className="flex-1">
+                <p className="text-sm font-semibold text-red-800">{error}</p>
+                <p className="text-xs text-red-600 mt-1">Por favor, verifica tus credenciales e intenta nuevamente.</p>
+              </div>
             </div>
           )}
 
@@ -97,7 +101,10 @@ export default function LoginPage() {
                   id="email"
                   type="email"
                   value={email}
-                  onChange={(e) => setEmail(e.target.value)}
+                  onChange={(e) => {
+                    setEmail(e.target.value)
+                    if (error) setError('')
+                  }}
                   className="w-full pl-10 pr-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary-500 focus:border-transparent outline-none transition-all text-gray-900 bg-white placeholder:text-gray-400"
                   placeholder="tu@email.com"
                   required
@@ -119,7 +126,10 @@ export default function LoginPage() {
                   id="password"
                   type="password"
                   value={password}
-                  onChange={(e) => setPassword(e.target.value)}
+                  onChange={(e) => {
+                    setPassword(e.target.value)
+                    if (error) setError('')
+                  }}
                   className="w-full pl-10 pr-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary-500 focus:border-transparent outline-none transition-all text-gray-900 bg-white placeholder:text-gray-400"
                   placeholder="••••••••"
                   required

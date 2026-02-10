@@ -30,12 +30,19 @@ api.interceptors.request.use(
 api.interceptors.response.use(
   (response) => response,
   (error) => {
-    if (error.response?.status === 401) {
-      // Clear auth and redirect to login
+    // Solo redirigir a login si:
+    // 1. Es un 401
+    // 2. NO es la petición de login (para permitir mostrar error de credenciales)
+    // 3. Estamos en el navegador
+    if (
+      error.response?.status === 401 && 
+      !error.config?.url?.includes('/auth/login') &&
+      typeof window !== 'undefined' &&
+      window.location.pathname !== '/login'
+    ) {
+      // Clear auth and redirect to login (token expirado)
       localStorage.removeItem('auth-storage')
-      if (typeof window !== 'undefined') {
-        window.location.href = '/login'
-      }
+      window.location.href = '/login'
     }
     return Promise.reject(error)
   }
