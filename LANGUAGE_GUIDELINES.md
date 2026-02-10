@@ -49,6 +49,7 @@ This document establishes the language standards for the Medical AI Assistant pr
 ## 📁 File-by-File Guidelines
 
 ### English Only:
+- `README.md` (root) - Main project documentation
 - `STATUS.md` - Development status
 - `QUICKSTART.md` - Developer quick start
 - `QUICKSTART_FULLSTACK.md` - Full stack setup
@@ -62,9 +63,6 @@ This document establishes the language standards for the Medical AI Assistant pr
 - All files in `backend/api/`, `backend/models/`, `backend/services/`
 - All `.py` files
 - All `.ts` and `.tsx` files
-
-### Bilingual (Spanish Overview + English Technical Details):
-- `README.md` (root) - Main project introduction in Spanish, technical sections in English
 
 ### Spanish for User Content:
 - `frontend/app/` components - UI text, labels, messages

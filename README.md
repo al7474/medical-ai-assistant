@@ -1,229 +1,242 @@
 # 🏥 Medical AI Assistant
 
-Asistente médico inteligente que conversa con pacientes, entiende sus necesidades y gestiona citas y documentos automáticamente.
+Intelligent medical assistant that converses with patients, understands their needs, and manages appointments and documents automatically.
 
-## 🎯 Visión del Proyecto
+## 🎯 Project Vision
 
-Un asistente médico con IA que:
-- 💬 Conversa naturalmente con pacientes
-- 🤖 Entiende intenciones y contexto
-- 📅 Gestiona citas automáticamente
-- 📄 Maneja documentos médicos
-- 🔒 Seguro y confiable
+An AI-powered medical assistant that:
+- 💬 Converses naturally with patients
+- 🤖 Understands intentions and context
+- 📅 Manages appointments automatically
+- 📄 Handles medical documents
+- 🔒 Secure and reliable
 
 ## 🛠️ Tech Stack
 
-| Componente | Tecnología | Estado |
-|------------|------------|--------|
-| Frontend | Next.js 14 + TypeScript | ✅ Fase 7 completa |
-| Backend | FastAPI | ✅ Fase 6 completa |
-| Base de Datos | PostgreSQL | ✅ Funcionando (puerto 5433) |
-| IA | LangChain + LLM | ✅ Configurado (requiere API key) |
-| Autenticación | JWT | ✅ Completa |
-| WebSocket | FastAPI WS | ✅ Real-time chat funcionando |
-| Cache | Redis | ⏳ Fase posterior |
-| Contenedores | Docker | ✅ PostgreSQL en Docker |
+| Component | Technology | Status |
+|-----------|------------|--------|
+| Frontend | Next.js 14 + TypeScript | ✅ Phase 7 complete |
+| Backend | FastAPI | ✅ Phase 6 complete |
+| Database | PostgreSQL | ✅ Running (port 5433) |
+| AI | LangChain + LLM | ✅ Configured (requires API key) |
+| Authentication | JWT | ✅ Complete |
+| WebSocket | FastAPI WS | ✅ Real-time chat working |
+| Cache | Redis | ⏳ Future phase |
+| Containers | Docker | ✅ PostgreSQL in Docker |
 
-## 🚀 Estado Actual: Fase 7 - Frontend Completo ✅
+## 🚀 Current Status: Phase 7 - Complete Frontend ✅
 
-### ✅ Completado
-- API REST funcionando con FastAPI
-- **Inicialización automática de base de datos**
-- Endpoints CRUD completos (users, appointments)
-- PostgreSQL con Docker (puerto 5433)
-- **Sistema de estadísticas**
-- **AI Chat Service con LangChain** 🤖✨
-- **Soporte para OpenAI GPT y Anthropic Claude**
-- **Fallback inteligente sin API key**
-- **Sistema de Autenticación JWT completo** 🔐
-  - Registro de usuarios con validación
-  - Login con tokens JWT
-  - Rutas protegidas
-  - Password hashing con bcrypt
-- **WebSocket para chat en tiempo real** 🌐✨
-  - Conexiones autenticadas con JWT
-  - Soporte para múltiples usuarios simultáneos
-  - Indicadores de escritura
-  - Integración con IA
-  - Test client HTML interactivo
-- **Frontend Next.js 14 completo** 💎✨
-  - Interfaz moderna con Tailwind CSS
-  - Páginas de login y registro
-  - Dashboard con chat en tiempo real
-  - Integración completa con WebSocket
-  - State management con Zustand
-  - Completamente tipado con TypeScript
-- Documentación automática
-- Estructura del proyecto lista
-- Sin warnings de Pydantic
-~~Frontend con Next.js~~ ✅
-7. **Features avanzadas** (historial de chat, notificaciones, roles)
-8. **Deploy a producción** (Docker, CI/CD, monitoring
-1. ~~Conectar PostgreSQL con Docker~~ ✅
-2. ~~Crear modelos de base de datos~~ ✅
-3. ~~Integrar AI con LangChain~~ ✅
-4. ~~Sistema de autenticación (registro/login con JWT)~~ ✅
-5. ~~WebSocket para chat en Completo
-│   ├── main.py          # API FastAPI
-│   ├── models.py        # Modelos DB
-│   ├── database.py      # PostgreSQL
-│   ├── services/        # Lógica de negocio
-│   ├── api/routes/      # Endpoints
-│   └── README.md        # Documentación
+### ✅ Completed
+- REST API working with FastAPI
+- **Automatic database initialization**
+- Complete CRUD endpoints (users, appointments)
+- PostgreSQL with Docker (port 5433)
+- **Statistics system**
+- **AI Chat Service with LangChain** 🤖✨
+- **Support for OpenAI GPT and Anthropic Claude**
+- **Intelligent fallback without API key**
+- **Complete JWT Authentication System** 🔐
+  - User registration with validation
+  - Login with JWT tokens
+  - Protected routes
+  - Password hashing with bcrypt
+- **WebSocket for real-time chat** 🌐✨
+  - JWT-authenticated connections
+  - Multiple simultaneous users support
+  - Typing indicators
+  - AI integration
+  - Interactive HTML test client
+- **Complete Next.js 14 Frontend** 💎✨
+  - Modern interface with Tailwind CSS
+  - Login and registration pages
+  - Dashboard with real-time chat
+  - Complete WebSocket integration
+  - State management with Zustand
+  - Fully typed with TypeScript
+- Automatic documentation
+- Project structure ready
+- No Pydantic warnings
+### 🚧 Next Steps
+- **Advanced Features**: Chat history, notifications, user roles
+- **Production Deployment**: Docker, CI/CD, monitoring
+
+## 📁 Project Structure
+
+```
+medical-ai-assistant/
+├── backend/             ✅ Complete
+│   ├── main.py          # FastAPI application
+│   ├── models/          # Database models
+│   ├── database.py      # PostgreSQL connection
+│   ├── services/        # Business logic
+│   ├── api/routes/      # API endpoints
+│   └── README.md        # Backend documentation
 │
-└── frontend/            ✅ Completo
+└── frontend/            ✅ Complete
     ├── app/             # Next.js App Router
     ├── components/      # React components
-    ├── lib/             # Utils y API client
-    └── README.md        # Documentación
-medical-ai-assistant/
-├── backend/              ✅ Fase 1 completa
-│   ├── main.py          # API FastAPI
-│   ├── requirements.txt # Dependencias
-│   └── README.md        # Documentación backend
-│1. Iniciar Backend
+    ├── lib/             # Utils and API client
+    └── README.md        # Frontend documentation
+```
+
+## 🏃 Quick Start
+
+### 1. Start Backend
 
 ```bash
-# Iniciar PostgreSQL con Docker
+# Start PostgreSQL with Docker
 docker-compose up -d
 
-# Iniciar servidor FastAPI
+# Start FastAPI server
 cd backend
 uvicorn main:app --reload
 
-# Backend corriendo en http://localhost:8000
+# Backend running at http://localhost:8000
 ```
 
-### 2. Iniciar Frontend
+### 2. Start Frontend
 
 ```bash
-# EnAcceso Rápido
+# Go to frontend folder
+cd frontend
 
-**Frontend (Interfaz Principal):**
-- **Home:** http://localhost:3000 ← Comienza aquí 🏠
-- **Registro:** http://localhost:3000/register
-- **Login:** http://localhost:3000/login
-- **Dashboard:** http://localhost:3000/dashboard (requiere login)
+# Install dependencies
+npm install
 
-**Backend (API):**
-- **Documentación API:** http://localhost:8000/docs
-- **Estado del sistema:** http://localhost:8000/health
-- **Test Client WebSocket:** http://localhost:8000/ws/test-client
+# Start development server
+npm run dev
 
-📖 **Guías completas:**
-- [QUICKSTART_FULLSTACK.md](QUICKSTART_FULLSTACK.md) - Guía completa Full-Stack 🆕
-- [backend/README.md](backend/README.md) - Documentación backend
-- [backend/AUTHENTICATION.md](backend/AUTHENTICATION.md) - Sistema de autenticación
-- [backend/WEBSOCKET.md](backend/WEBSOCKET.md) - Chat en tiempo real
-- [frontend/README.md](frontend/README.md) - Documentación frontend
-# 3. ¡Listo! Abre tu navegador
-# http://localhost:8000/docs
+# Frontend running at http://localhost:3000
 ```
 
-**¡Nuevo!** La base de datos se inicializa automáticamente, no necesitas ejecutar scripts adicionales.
+### 3. Open your browser
+- **Frontend:** http://localhost:3000
+- **API Docs:** http://localhost:8000/docs
 
-### Probar la API
-- **Documentación interactiva:** http://localhost:8000/docs
-- **Estado del sistema:** http://localhost:8000/health
-- **Estadísticas:** http://localhost:8000/stats
-- **Info del proyecto:** http://localhost:8000/info
-- **Chat con IA:** http://localhost:8000/docs (POST /chat) 🤖
-- **Autenticación:**
-  - Registro: POST /auth/register 🔐
-  - Login: POST /auth/login 🔐
-  - Ver perfil: GET /auth/me 🔐
-- **WebSocket Chat en tiempo real:** ws://localhost:8000/ws/chat 🌐
-- **Test Client WebSocket:** http://localhost:8000/ws/test-client ✨
+**Note:** Database initializes automatically, no need to run additional scripts.
 
-📖 **Guías detalladas:**
-- [QUICKSTART.md](QUICKSTART.md) - Inicio rápido
-- [AI_SETUP.md](AI_SETUP.md) - Cómo configurar la IA
-- [backend/AUTHENTICATION.md](backend/AUTHENTICATION.md) - Sistema de autenticación 🆕
-- [backend/WEBSOCKET.md](backend/WEBSOCKET.md) - Chat en tiempo real 🆕
+## 🔗 Quick Access
 
-## 📖 Documentación
+**Frontend (Main Interface):**
+- **Home:** http://localhost:3000 ← Start here 🏠
+- **Register:** http://localhost:3000/register
+- **Login:** http://localhost:3000/login
+- **Dashboard:** http://localhost:3000/dashboard (requires login)
 
-- [Backend README](backend/README.md) - Guía del backend
+**Backend (API):**
+- **API Documentation:** http://localhost:8000/docs
+- **System Health:** http://localhost:8000/health
+- **WebSocket Test Client:** http://localhost:8000/ws/test-client
 
-## 🎓 Aprendizaje Paso a Paso
+## 📖 Documentation
 
-Este proyecto se construye en fases educativas:
+### Complete Guides
+- [QUICKSTART_FULLSTACK.md](QUICKSTART_FULLSTACK.md) - Complete Full-Stack guide 🆕
+- [LANGUAGE_GUIDELINES.md](LANGUAGE_GUIDELINES.md) - Language standards for the project 🆕
+- [STATUS.md](STATUS.md) - Development status and progress
 
-### Fase 1: Backend Básico ✅ 
-- API REST simple
-- Endpoints básicos
-- Sin base de datos
+### Backend Documentation
+- [backend/README.md](backend/README.md) - Backend overview
+- [backend/SETUP.md](backend/SETUP.md) - Detailed setup guide
+- [backend/AUTHENTICATION.md](backend/AUTHENTICATION.md) - Authentication system 🆕
+- [backend/WEBSOCKET.md](backend/WEBSOCKET.md) - Real-time chat 🆕
+- [backend/STRUCTURE.md](backend/STRUCTURE.md) - Code architecture
+- [backend/PHASE1_COMPLETED.md](backend/PHASE1_COMPLETED.md) - Medical data models
+- [backend/PHASE2_COMPLETED.md](backend/PHASE2_COMPLETED.md) - User context integration
 
-### Fase 2: Base de Datos ✅
-- PostgreSQL con Docker
-- Modelos de datos
+### Frontend Documentation
+- [froStep-by-Step Development
+
+This project is built in educational phases:
+
+### Phase 1: Basic Backend ✅ 
+- Simple REST API
+- Basic endpoints
+- No database
+
+### Phase 2: Database ✅
+- PostgreSQL with Docker
+- Data models
 - CRUD operations
-- Inicialización automática
-- Sistema de estadísticas
+- Automatic initialization
+- Statistics system
 
-### Fase 3: Integración de IA ✅
-- LangChain integrado
-- Soporte OpenAI GPT y Anthropic Claude
-- Chat inteligente co✅
-- Next.js 14 con TypeScript
-- Páginas de login y registro
-- Interfaz de chat con WebSocket
-- Dashboard de usuario
-- UI moderna con Tailwind CSS
-- State management con Zustand
+### Phase 3: AI Integration ✅
+- LangChain integrated
+- OpenAI GPT and Anthropic Claude support
+- Intelligent chat with medical context
+- Intelligent fallback system
 
-### Fase 8: Features Avanzadas (Próximo)
-- Mejores prácticas
-- Código limpio y mantenible
+### Phase 4: Authentication ✅
+- User registration with validation
+- Login with JWT
+- Protected routes
+- Password hashing with bcrypt
+- Token management (7-day expiration)
 
-### Fase 5: Autenticación ✅
-- Registro de usuarios con validación
-- Login con JWT
-- Rutas protegidas
-- Password hashing con bcrypt
-- Gestión de tokens (7 días de expiración)
+### Phase 5: Real-time Chat ✅
+- WebSocket with JWT authentication
+- Multiple users support
+- Typing indicators
+- Complete AI integration
+- Interactive HTML test client
 
-### Fase 6: Chat en Tiempo Real ✅
-- WebSocket con autenticación JWT
-- Soporte para múltiples usuarios
-- Indicadores de escritura
-- Integración completa con IA
-- Test client HTML interactivo
+### Phase 6: Medical Data Models ✅
+- MedicalProfile model
+- Conversation and Message models
+- MedicalDocument model
+- Complete CRUD endpoints
+- Database migration
 
-### Fase 7: Frontend (Próximo)
-- Next.js setup
-- Páginas de login/registro
-- Interfaz de chat con WebSocket
-- Dashboard de usuario
+### Phase 7: User Context Integration ✅
+- MedicalContextService
+- Personalized AI responses
+- Conversation history
+- Automatic message persistence
+- Context-aware chat
 
-### Fase 8: Features Avanzadas
-- Historial de conversaciones
-- Sistema de citas médicas
-- Gestión de documentos
-- Notificaciones en tiempo real
-- Roles y permisos avanzados
+### Phase 8: Frontend ✅
+- Next.js 14 with TypeScript
+- Login and registration pages
+- Chat interface with WebSocket
+- User dashboard
+- Modern UI with Tailwind CSS
+- State management with Zustand
 
-## 🤝 Mejores Prácticas
+### Phase 9: Advanced Features (Next)
+- RAG with vector store
+- LangGraph for intelligent flows
+- Medical profile UI
+- Document processing
+- Conversation management
 
-- ✅ Todo el código en inglés
-- ✅ Type hints en Python
-- ✅ Docstrings completos
-- ✅ Código limpio y comentado
-- ✅ Sin hardcodear secrets
-- ✅ Estructura organizada
+## 🤝 Best Practices
 
-## 📝 Notas
+- ✅ All code in English
+- ✅ Type hints in Python
+- ✅ Complete docstrings
+- ✅ Clean and commented code
+- ✅ No hardcoded secrets
+- ✅ Organized structure
 
-- Proyecto educativo paso a paso
-- Cada fase debe funcionar antes de continuar
-- No te adelantes, aprende bien cada parte
-- Consulta la documentación cuando tengas dudas
+## 📝 Notes
 
-## 🆘 Ayuda
+- Educational step-by-step project
+- Each phase must work before continuing
+- Learn each part thoroughly
+- Consult documentation when in doubt
 
-Si algo no funciona:
-1. Verifica que el entorno virtual esté activado
-2. Revisa que instalaste las dependencias
+## 🆘 Help
+
+If something doesn't work:
+1. Verify the virtual environment is activated
+2. Check that you installed dependencies
+3. Read the backend README.md
+4. Review the server logs
+
+---
+
+**Let's build something amazingependencias
 3. Lee el README.md del backend
 4. Revisa los logs del servidor
 
