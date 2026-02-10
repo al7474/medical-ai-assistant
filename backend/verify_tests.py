@@ -52,7 +52,7 @@ for file_path in required_files:
 # Check imports
 print("\n📦 Checking dependencies...")
 try:
-    import pytest
+    import pytest # type: ignore
     print(f"  ✅ pytest {pytest.__version__}")
 except ImportError:
     print("  ❌ pytest - NOT INSTALLED")
