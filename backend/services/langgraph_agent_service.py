@@ -68,7 +68,7 @@ class LangGraphAgentService:
         elif gemini_key:
             # Use Google Gemini (good for tool calling)
             self.llm = ChatGoogleGenerativeAI(
-                model="gemini-1.5-flash",
+                model=settings.AI_MODEL,
                 temperature=0,
                 google_api_key=gemini_key
             )

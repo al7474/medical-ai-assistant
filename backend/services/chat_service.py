@@ -51,14 +51,12 @@ class ChatService:
                 api_key = os.getenv("GEMINI_API_KEY")
                 if not api_key or api_key == "your-gemini-api-key-here":
                     raise ValueError("Gemini API key not configured")
-                # Default to gemini-1.5-flash if not specified
-                gemini_model = self.model_name if self.model_name != "gpt-3.5-turbo" else "gemini-1.5-flash"
                 self.llm = ChatGoogleGenerativeAI(
-                    model=gemini_model,
+                    model=self.model_name,
                     temperature=0.7,
                     google_api_key=api_key
                 )
-                print(f"✅ AI Service initialized with Google Gemini ({gemini_model})")
+                print(f"✅ AI Service initialized with Google Gemini ({self.model_name})")
                 
             else:
                 raise ValueError(f"Unknown AI provider: {self.provider}")
