@@ -275,10 +275,3 @@ If something doesn't work:
 
 ---
 
-**Let's build something amazingependencias
-3. Lee el README.md del backend
-4. Revisa los logs del servidor
-
----
-
-**¡Construyamos algo increíble! 🚀**
