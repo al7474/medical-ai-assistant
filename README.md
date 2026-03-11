@@ -180,7 +180,7 @@ npm run dev
 - [backend/PHASE2_COMPLETED.md](backend/PHASE2_COMPLETED.md) - User context integration
 
 ### Frontend Documentation
-- [froStep-by-Step Development
+- froStep-by-Step Development
 
 This project is built in structured phases:
 
